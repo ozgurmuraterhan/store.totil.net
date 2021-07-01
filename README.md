@@ -1,2 +1,3 @@
-# store.totil.net
+store.totil.net
+
 PickBazar Platform
