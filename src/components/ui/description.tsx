@@ -1,3 +1,5 @@
+import { useTranslation } from "next-i18next";
+
 type Props = {
   className?: string;
   title?: string;
@@ -11,12 +13,16 @@ const Description: React.FC<Props> = ({
   className,
   ...props
 }) => {
+  const { t } = useTranslation();
+
   return (
     <div className={className} {...props}>
       {title && (
-        <h4 className="text-base font-semibold text-gray-600 mb-2">{title}</h4>
+        <h4 className="text-base font-semibold text-body-dark mb-2">
+          {t(title)}
+        </h4>
       )}
-      {details && <p className="text-sm text-body">{details}</p>}
+      {details && <p className="text-sm text-body">{t(details)}</p>}
     </div>
   );
 };

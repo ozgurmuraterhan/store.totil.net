@@ -5,9 +5,6 @@ export interface State {
   isAuthorize: boolean;
   sidebarView: any;
   displaySidebar: boolean;
-  displayModal: boolean;
-  modalView: string;
-  modalData: any;
   displayHeaderSearch: boolean;
   displayMobileSearch: boolean;
   displayModalStickyBar: boolean;
@@ -17,9 +14,6 @@ const initialState = {
   isAuthorize: loggedIn(),
   sidebarView: "CART_VIEW",
   displaySidebar: false,
-  displayModal: false,
-  modalView: "LOGIN_VIEW",
-  modalData: null,
   displayHeaderSearch: false,
   displayMobileSearch: false,
   displayModalStickyBar: false,
@@ -40,16 +34,6 @@ type Action =
       view: SIDEBAR_VIEW;
     }
   | {
-      type: "OPEN_MODAL";
-    }
-  | {
-      type: "CLOSE_MODAL";
-    }
-  | {
-      type: "SET_MODAL_VIEW";
-      view: MODAL_VIEWS;
-    }
-  | {
       type: "SHOW_HEADER_SEARCH";
     }
   | {
@@ -63,25 +47,14 @@ type Action =
     }
   | {
       type: "TOGGLE_MOBILE_SEARCH";
-    }
-  | {
-      type: "SET_MODAL_DATA";
-      data: MODAL_DATA;
     };
 
-type MODAL_VIEWS =
-  | "REGISTER"
-  | "LOGIN_VIEW"
-  | "FORGOT_VIEW"
-  | "ADD_OR_UPDATE_ADDRESS"
-  | "DELETE_ADDRESS"
-  | "PRODUCT_DETAILS";
 type SIDEBAR_VIEW =
   | "CART_VIEW"
   | "FILTER_VIEW"
+  | "FILTER_LAYOUT_TWO_VIEW"
   | "MAIN_MENU_VIEW"
   | "AUTH_MENU_VIEW";
-type MODAL_DATA = any;
 
 export const UIContext = React.createContext<State | any>(initialState);
 
@@ -93,7 +66,6 @@ function uiReducer(state: State, action: Action) {
       return {
         ...state,
         isAuthorize: true,
-        displayModal: state.displayModal && false,
       };
     }
     case "OPEN_SIDEBAR": {
@@ -112,30 +84,6 @@ function uiReducer(state: State, action: Action) {
       return {
         ...state,
         sidebarView: action.view,
-      };
-    }
-    case "OPEN_MODAL": {
-      return {
-        ...state,
-        displayModal: true,
-      };
-    }
-    case "CLOSE_MODAL": {
-      return {
-        ...state,
-        displayModal: false,
-      };
-    }
-    case "SET_MODAL_VIEW": {
-      return {
-        ...state,
-        modalView: action.view,
-      };
-    }
-    case "SET_MODAL_DATA": {
-      return {
-        ...state,
-        modalData: action.data,
       };
     }
     case "SHOW_HEADER_SEARCH": {
@@ -186,18 +134,11 @@ export const UIProvider: FC = (props) => {
   const setSidebarView = (view: SIDEBAR_VIEW) =>
     dispatch({ type: "SET_SIDEBAR_VIEW", view });
 
-  const openModal = () => dispatch({ type: "OPEN_MODAL" });
-  const closeModal = () => dispatch({ type: "CLOSE_MODAL" });
   const showHeaderSearch = () => dispatch({ type: "SHOW_HEADER_SEARCH" });
   const hideHeaderSearch = () => dispatch({ type: "HIDE_HEADER_SEARCH" });
   const showModalStickyBar = () => dispatch({ type: "SHOW_MODAL_STICKY_BAR" });
   const hideModalStickyBar = () => dispatch({ type: "HIDE_MODAL_STICKY_BAR" });
   const toggleMobileSearch = () => dispatch({ type: "TOGGLE_MOBILE_SEARCH" });
-
-  const setModalView = (view: MODAL_VIEWS) =>
-    dispatch({ type: "SET_MODAL_VIEW", view });
-  const setModalData = (data: MODAL_DATA) =>
-    dispatch({ type: "SET_MODAL_DATA", data });
 
   const value = useMemo(
     () => ({
@@ -208,10 +149,6 @@ export const UIProvider: FC = (props) => {
       toggleSidebar,
       setSidebarView,
       closeSidebarIfPresent,
-      openModal,
-      closeModal,
-      setModalView,
-      setModalData,
       showHeaderSearch,
       hideHeaderSearch,
       showModalStickyBar,

@@ -20,13 +20,13 @@ export default function VariationPrice({
   });
   return (
     <span className="flex items-center">
-      <ins className="text-2xl md:text-3xl font-semibold text-primary no-underline">
+      <ins className="text-2xl md:text-3xl font-semibold text-accent no-underline">
         {!isEmpty(selectedVariation)
           ? `${basePrice ? basePrice : price}`
           : `${min_price} - ${max_price}`}
       </ins>
       {discount && (
-        <del className="text-sm md:text-base font-normal text-gray-400 ml-2">
+        <del className="text-sm md:text-base font-normal text-muted ms-2">
           {price}
         </del>
       )}

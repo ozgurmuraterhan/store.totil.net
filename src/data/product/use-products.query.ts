@@ -6,7 +6,11 @@ import {
 import { CoreApi, ParamsType } from "@utils/api/core.api";
 import { API_ENDPOINTS } from "@utils/api/endpoints";
 import { mapPaginatorData } from "@utils/data-mappers";
-import { useInfiniteQuery } from "react-query";
+import {
+  QueryKey,
+  useInfiniteQuery,
+  UseInfiniteQueryOptions,
+} from "react-query";
 const ProductService = new CoreApi(API_ENDPOINTS.PRODUCTS);
 type PaginatedProduct = {
   data: Product[];
@@ -29,11 +33,21 @@ const fetchProducts = async ({
   return { data, paginatorInfo: mapPaginatorData({ ...rest }) };
 };
 
-const useProductsQuery = (options: ProductsQueryOptionsType) => {
+const useProductsQuery = (
+  params: ProductsQueryOptionsType,
+  options?: UseInfiniteQueryOptions<
+    PaginatedProduct,
+    Error,
+    PaginatedProduct,
+    PaginatedProduct,
+    QueryKey
+  >
+) => {
   return useInfiniteQuery<PaginatedProduct, Error>(
-    [API_ENDPOINTS.PRODUCTS, options],
+    [API_ENDPOINTS.PRODUCTS, params],
     fetchProducts,
     {
+      ...options,
       getNextPageParam: ({ paginatorInfo }) => paginatorInfo.nextPageUrl,
     }
   );

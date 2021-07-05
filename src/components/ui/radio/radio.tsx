@@ -28,9 +28,7 @@ const Radio = React.forwardRef<HTMLInputElement, Props>(
           </label>
         </div>
 
-        {error && (
-          <p className="my-2 text-xs text-right text-red-500">{error}</p>
-        )}
+        {error && <p className="my-2 text-xs text-end text-red-500">{error}</p>}
       </div>
     );
   }

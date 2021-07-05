@@ -7,8 +7,11 @@ import CartCounterButton from "@components/cart/cart-counter-button";
 import CouponFeedLoader from "@components/ui/loaders/coupon-feed-loader";
 import NotFound from "@components/common/not-found";
 import { Fragment } from "react";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
 
 export default function OfferPage() {
+  const { t } = useTranslation("common");
   const {
     isFetching: loading,
     isFetchingNextPage: loadingMore,
@@ -26,7 +29,7 @@ export default function OfferPage() {
   if (!loading && !data?.pages?.length) {
     return (
       <div className="bg-gray-100 min-h-full pt-6 pb-8 px-4 lg:p-8">
-        <NotFound text="Sorry, No Coupons Found :(" className="h-96" />
+        <NotFound text="text-no-coupon" className="h-96" />
       </div>
     );
   }
@@ -50,7 +53,7 @@ export default function OfferPage() {
         {hasNextPage && (
           <div className="flex items-center justify-center mt-8 lg:mt-12">
             <Button onClick={handleLoadMore} loading={loadingMore}>
-              Load More
+              {t("text-load-more")}
             </Button>
           </div>
         )}
@@ -61,3 +64,11 @@ export default function OfferPage() {
 }
 
 OfferPage.Layout = Layout;
+
+export const getStaticProps = async ({ locale }: any) => {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common"])),
+    },
+  };
+};

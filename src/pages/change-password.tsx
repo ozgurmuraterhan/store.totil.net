@@ -11,14 +11,21 @@ import { parseContextCookie } from "@utils/parse-cookie";
 import PasswordInput from "@components/ui/password-input";
 import { useChangePasswordMutation } from "@data/auth/use-change-password.mutation";
 import * as yup from "yup";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
 
-export const getServerSideProps: GetServerSideProps = async (context: any) => {
-  const cookies = parseContextCookie(context?.req?.headers?.cookie);
+export const getServerSideProps: GetServerSideProps = async ({
+  req,
+  locale,
+}: any) => {
+  const cookies = parseContextCookie(req?.headers?.cookie);
   if (!cookies?.auth_token) {
     return { redirect: { destination: "/", permanent: false } };
   }
   return {
-    props: {},
+    props: {
+      ...(await serverSideTranslations(locale, ["common"])),
+    },
   };
 };
 
@@ -29,19 +36,19 @@ interface FormValues {
 }
 
 const changeSchema = yup.object().shape({
-  oldPassword: yup.string().required("Old Password is required"),
-  newPassword: yup.string().required("New password is required"),
+  oldPassword: yup.string().required("error-old-password-required"),
+  newPassword: yup.string().required("error-new-password-required"),
   passwordConfirmation: yup
     .string()
-    .oneOf([yup.ref("newPassword")], "Mismatched passwords")
-    .required("Please confirm your password"),
+    .oneOf([yup.ref("newPassword")], "error-match-passwords")
+    .required("error-confirm-password"),
 });
 
 const ChangePasswordPage = () => {
-  const {
-    mutate: changePassword,
-    isLoading: loading,
-  } = useChangePasswordMutation();
+  const { t } = useTranslation("common");
+
+  const { mutate: changePassword, isLoading: loading } =
+    useChangePasswordMutation();
   const {
     register,
     handleSubmit,
@@ -65,7 +72,7 @@ const ChangePasswordPage = () => {
             });
             return;
           }
-          toast.success("Successfully updated!");
+          toast.success(t("password-successful"));
         },
         onError: (error) => {
           const {
@@ -83,11 +90,11 @@ const ChangePasswordPage = () => {
   }
   return (
     <div className="flex flex-col xl:flex-row items-start max-w-1920 w-full mx-auto py-10 px-8 xl:py-14 xl:px-16 2xl:px-20 bg-gray-100">
-      <ProfileSidebar className="flex-shrink-0 hidden xl:block xl:w-80 mr-10" />
+      <ProfileSidebar className="flex-shrink-0 hidden xl:block xl:w-80 me-10" />
       {/* End of sidebar navigation */}
       <Card className="w-full">
         <h1 className="mb-5 sm:mb-8 text-lg sm:text-xl text-heading font-semibold">
-          Change Password
+          {t("change-password")}
         </h1>
 
         <form
@@ -96,28 +103,28 @@ const ChangePasswordPage = () => {
           className="flex flex-col"
         >
           <PasswordInput
-            label="Old Password"
+            label={t("text-old-password")}
             {...register("oldPassword")}
-            error={errors.oldPassword?.message}
+            error={t(errors.oldPassword?.message!)}
             className="mb-5"
             variant="outline"
           />
           <PasswordInput
-            label="New Password"
+            label={t("text-new-password")}
             {...register("newPassword")}
-            error={errors.newPassword?.message}
+            error={t(errors.newPassword?.message!)}
             className="mb-5"
             variant="outline"
           />
           <PasswordInput
-            label="Confirm Password"
+            label={t("text-confirm-password")}
             {...register("passwordConfirmation")}
-            error={errors.passwordConfirmation?.message}
+            error={t(errors.passwordConfirmation?.message!)}
             className="mb-5"
             variant="outline"
           />
-          <Button loading={loading} disabled={loading} className="ml-auto">
-            Submit
+          <Button loading={loading} disabled={loading} className="ms-auto">
+            {t("text-submit")}
           </Button>
         </form>
       </Card>

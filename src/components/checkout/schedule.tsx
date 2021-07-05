@@ -19,7 +19,7 @@ const Schedule = ({ count }: Props) => {
   return (
     <SectionWithCardGroup
       count={count}
-      heading="Delivery Schedule"
+      heading="text-delivery-schedule"
       items={siteSettings.deliverySchedule}
       onSelect={handleSelect}
     />

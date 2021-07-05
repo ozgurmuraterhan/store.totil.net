@@ -7,9 +7,12 @@ import Logo from "@components/ui/logo";
 import Search from "@components/common/search";
 import JoinButton from "@components/layout/navbar/join-button";
 import ProductTypeMenu from "@components/layout/navbar/product-type-menu";
-import { addActiveScroll } from "@utils/add-active-scroll";
 import dynamic from "next/dynamic";
 import { ROUTES } from "@utils/routes";
+import { useTypesQuery } from "@data/type/use-types.query";
+import { useRouter } from "next/router";
+import { useTranslation } from "next-i18next";
+
 const AuthorizedMenu = dynamic(
   () => import("@components/layout/navbar/authorized-menu"),
   { ssr: false }
@@ -18,9 +21,22 @@ const AuthorizedMenu = dynamic(
 type DivElementRef = React.MutableRefObject<HTMLDivElement>;
 
 const NavbarWithSearch = () => {
+  const { t } = useTranslation("common");
+  const { asPath } = useRouter();
+  const { data } = useTypesQuery();
+
+  const slugs = data?.types?.map((item) => item.slug);
+  const currentPath = asPath
+    .substring(
+      0,
+      asPath.indexOf("?") === -1 ? asPath.length : asPath.indexOf("?")
+    )
+    .replace(/\//g, "");
+
+  const hasType = slugs?.includes(currentPath);
+
   const navbarRef = useRef() as DivElementRef;
   const { isAuthorize, displayHeaderSearch, displayMobileSearch } = useUI();
-  addActiveScroll(navbarRef);
 
   return (
     <header
@@ -29,42 +45,44 @@ const NavbarWithSearch = () => {
     >
       <nav
         className={cn(
-          "w-full h-14 md:h-16 lg:h-22 py-5 px-4 lg:px-8 flex justify-between items-center  top-0 right-0 z-20 transition-transform duration-300",
+          "w-full h-14 md:h-16 lg:h-22 py-5 px-4 lg:px-8 flex justify-between items-center  top-0 end-0 z-20 transition-transform duration-300",
           {
-            "fixed bg-white lg:bg-transparent lg:absolute": !displayHeaderSearch,
-            "is-sticky fixed bg-white shadow-sm": displayHeaderSearch,
+            "fixed bg-light lg:bg-transparent lg:absolute":
+              !displayHeaderSearch && hasType,
+            "is-sticky fixed bg-light shadow-sm":
+              displayHeaderSearch || !hasType,
           }
         )}
       >
         {displayMobileSearch ? (
           <div className="w-full">
-            <Search label="grocery search at header" variant="minimal" />
+            <Search label={t("text-search-label")} variant="minimal" />
           </div>
         ) : (
           <>
             <Logo className="mx-auto lg:mx-0" />
-            <ProductTypeMenu className="ml-10 mr-auto hidden xl:block" />
+            <ProductTypeMenu className="ms-10 me-auto hidden xl:block" />
             <div className="hidden lg:block w-full">
               <div
                 className={cn(
                   "w-full xl:w-11/12 2xl:w-10/12 mx-auto px-10 overflow-hidden",
                   {
-                    hidden: !displayHeaderSearch,
-                    flex: displayHeaderSearch,
+                    hidden: !displayHeaderSearch && hasType,
+                    flex: displayHeaderSearch || !hasType,
                   }
                 )}
               >
-                <Search label="grocery search at header" variant="minimal" />
+                <Search label={t("text-search-label")} variant="minimal" />
               </div>
             </div>
-            <ul className="hidden lg:flex items-center flex-shrink-0 space-x-10">
+            <ul className="hidden lg:flex items-center flex-shrink-0 space-s-10">
               {isAuthorize ? (
                 <li key="track-orders">
                   <Link
                     href={ROUTES.ORDERS}
-                    className="font-semibold text-heading flex items-center transition duration-200 no-underline hover:text-primary focus:text-primary"
+                    className="font-semibold text-heading flex items-center transition duration-200 no-underline hover:text-accent focus:text-accent"
                   >
-                    Track Order
+                    {t("nav-menu-track-order")}
                   </Link>
                 </li>
               ) : null}
@@ -72,10 +90,10 @@ const NavbarWithSearch = () => {
                 <li key={`${href}${label}`}>
                   <Link
                     href={href}
-                    className="font-semibold text-heading flex items-center transition duration-200 no-underline hover:text-primary focus:text-primary"
+                    className="font-semibold text-heading flex items-center transition duration-200 no-underline hover:text-accent focus:text-accent"
                   >
-                    {icon && <span className="mr-2">{icon}</span>}
-                    {label}
+                    {icon && <span className="me-2">{icon}</span>}
+                    {t(label)}
                   </Link>
                 </li>
               ))}

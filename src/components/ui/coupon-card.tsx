@@ -2,6 +2,7 @@ import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import cn from "classnames";
 import CopyToClipboard from "react-copy-to-clipboard";
+import { useTranslation } from "next-i18next";
 
 type CouponCardProps = {
   coupon?: any;
@@ -10,6 +11,7 @@ type CouponCardProps = {
 type InputElementRef = React.MutableRefObject<HTMLInputElement>;
 
 const CouponCard: React.FC<CouponCardProps> = ({ coupon, className }) => {
+  const { t } = useTranslation("common");
   const { code, image, is_valid } = coupon;
   const [copyText, setCopyText] = useState({
     value: code,
@@ -38,7 +40,7 @@ const CouponCard: React.FC<CouponCardProps> = ({ coupon, className }) => {
           height={429}
         />
       </div>
-      <div className="w-11/12 grid grid-flow-col auto-cols-fr items-center py-4 px-5 mx-auto rounded-bl rounded-br shadow-sm bg-white">
+      <div className="w-11/12 grid grid-flow-col auto-cols-fr items-center py-4 px-5 mx-auto rounded-bl rounded-be shadow-sm bg-light">
         {is_valid ? (
           <>
             <input
@@ -58,19 +60,19 @@ const CouponCard: React.FC<CouponCardProps> = ({ coupon, className }) => {
                   })
                 }
               >
-                <button className="text-right text-primary text-sm font-semibold transition-colors duration-200 focus:outline-none hover:text-primary-2 focus:text-primary-2">
-                  Copy
+                <button className="text-end text-accent text-sm font-semibold transition-colors duration-200 focus:outline-none hover:text-accent-hover focus:text-accent-hover">
+                  <span>{t("text-copy")}</span>
                 </button>
               </CopyToClipboard>
             ) : (
-              <div className="text-right text-primary text-sm font-semibold">
-                Copied!
+              <div className="text-end text-accent text-sm font-semibold">
+                {t("text-copied")}
               </div>
             )}
           </>
         ) : (
           <span className="text-sm text-center block text-red-500">
-            Expired
+            {t("text-expired")}
           </span>
         )}
       </div>

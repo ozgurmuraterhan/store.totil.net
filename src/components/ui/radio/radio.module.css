@@ -2,6 +2,7 @@
 .radio_input[type="radio"]:not(:checked) {
   position: absolute;
   left: -9999px;
+  display: none;
 }
 
 .radio_input[type="radio"]:checked + label,
@@ -20,7 +21,7 @@
   top: 0;
   width: 18px;
   height: 18px;
-  border: 1px solid var(--gray-300);
+  border: 1px solid rgb(var(--color-gray-300));
   border-radius: 100%;
   background-color: #ffffff;
 }
@@ -30,7 +31,7 @@
   content: "";
   width: 10px;
   height: 10px;
-  background: var(--primary);
+  background: rgb(var(--color-accent));
   position: absolute;
   top: 4px;
   left: 4px;
@@ -46,7 +47,7 @@
 }
 
 .radio_input[type="radio"]:checked + label:before {
-  border-color: var(--primary);
+  border-color: rgb(var(--color-accent));
 }
 
 .radio_input[type="radio"]:checked + label:after {

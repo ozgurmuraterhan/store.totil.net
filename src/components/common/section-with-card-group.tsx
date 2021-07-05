@@ -4,6 +4,7 @@ import { CloseIcon } from "@components/icons/close-icon";
 import { PencilIcon } from "@components/icons/pencil-icon";
 import { PlusIcon } from "@components/icons/plus-icon";
 import { formatAddress } from "@utils/format-address";
+import { useTranslation } from "next-i18next";
 
 interface ICardItem {
   id: string | number;
@@ -33,6 +34,7 @@ const SectionWithCardGroup = ({
   onDelete,
   onSelect,
 }: Props) => {
+  const { t } = useTranslation("common");
   const [selected, setSelected] = useState(0);
   function select(item: any, idx: number) {
     setSelected(idx);
@@ -42,24 +44,25 @@ const SectionWithCardGroup = ({
   return (
     <>
       <div className="flex items-center justify-between mb-5 md:mb-8">
-        <div className="flex items-center space-x-3 md:space-x-4">
+        <div className="flex items-center space-s-3 md:space-s-4">
           {count && (
-            <span className="rounded-full w-8 h-8 bg-primary flex items-center justify-center text-base lg:text-xl text-white">
+            <span className="rounded-full w-8 h-8 bg-accent flex items-center justify-center text-base lg:text-xl text-light">
               {count}
             </span>
           )}
           <p className="text-lg lg:text-xl text-heading capitalize">
-            {heading}
+            {t(heading)}
           </p>
         </div>
         {onAdd && (
           <button
-            className="flex items-center text-sm font-semibold text-primary transition-colors duration-200 focus:outline-none focus:text-primary-2 hover:text-primary-2"
+            className="flex items-center text-sm font-semibold text-accent transition-colors duration-200 focus:outline-none focus:text-accent-hover hover:text-accent-hover"
             onClick={onAdd}
           >
-            <PlusIcon className="w-4 h-4 stroke-2 mr-0.5" /> Add{" "}
-            <span className="hidden sm:inline-block sm:ml-1">
-              {addActionText}
+            <PlusIcon className="w-4 h-4 stroke-2 me-0.5" />
+            {t("text-add")}{" "}
+            <span className="hidden sm:inline-block sm:ms-1">
+              {t(addActionText!)}
             </span>
           </button>
         )}
@@ -70,9 +73,9 @@ const SectionWithCardGroup = ({
             <div
               key={item.id}
               className={cn(
-                "relative p-4 rounded border cursor-pointer group hover:border-primary",
+                "relative p-4 rounded border cursor-pointer group hover:border-accent",
                 {
-                  "border-primary shadow-sm": selected === idx,
+                  "border-accent shadow-sm": selected === idx,
                   "bg-gray-100 border-transparent": selected !== idx,
                 }
               )}
@@ -81,27 +84,27 @@ const SectionWithCardGroup = ({
               <p className="text-sm text-heading font-semibold mb-3 capitalize">
                 {item.title}
               </p>
-              <p className="text-sm text-gray-700">
+              <p className="text-sm text-sub-heading">
                 {item.description
                   ? item.description
                   : formatAddress(item.address)}
               </p>
-              <div className="absolute top-4 right-4 flex space-x-2 opacity-0 group-hover:opacity-100">
+              <div className="absolute top-4 end-4 flex space-s-2 opacity-0 group-hover:opacity-100">
                 {onEdit && (
                   <button
-                    className="flex items-center justify-center w-5 h-5 rounded-full bg-primary text-white"
+                    className="flex items-center justify-center w-5 h-5 rounded-full bg-accent text-light"
                     onClick={() => onEdit(item)}
                   >
-                    <span className="sr-only">Edit</span>
+                    <span className="sr-only">{t("text-edit")}</span>
                     <PencilIcon className="w-3 h-3" />
                   </button>
                 )}
                 {onDelete && (
                   <button
-                    className="flex items-center justify-center w-5 h-5 rounded-full bg-red-600 text-white"
+                    className="flex items-center justify-center w-5 h-5 rounded-full bg-red-600 text-light"
                     onClick={() => onDelete(item)}
                   >
-                    <span className="sr-only">Delete</span>
+                    <span className="sr-only">{t("text-delete")}</span>
                     <CloseIcon className="w-3 h-3" />
                   </button>
                 )}
@@ -109,8 +112,8 @@ const SectionWithCardGroup = ({
             </div>
           ))
         ) : (
-          <div className="relative px-5 py-6 text-body text-center bg-gray-100 rounded border border-gray-200">
-            No Address Found
+          <div className="relative px-5 py-6 text-body text-center bg-gray-100 rounded border border-border-200">
+            {t("text-no-address")}
           </div>
         )}
       </div>

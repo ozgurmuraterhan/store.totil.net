@@ -1,7 +1,14 @@
+export type GalleryType = {
+  id: string | number;
+  title: string;
+  image: string;
+};
+
 export type BannerType = {
   heading: string;
   subheading: string;
   image: string;
+  gallery?: GalleryType[];
 };
 export interface PageInfo {
   title: string;
@@ -21,19 +28,29 @@ export const sitePages: Record<PageName, PageInfo> = {
     title: "Grocery - PickBazar",
     description: "Grocery Details",
     banner: {
-      heading: "Groceries Delivered in 90 Minute",
-      subheading:
-        "Get your healthy foods & snacks delivered at your doorsteps all day everyday",
+      heading: "heading-grocery",
+      subheading: "subheading-grocery",
       image: "/banner/grocery.png",
+      gallery: [
+        {
+          id: 1,
+          title: "Buy One Get One Free",
+          image: "/banner/grocery-banner-img-one.jpg",
+        },
+        {
+          id: 2,
+          title: "Buy One Get One Free",
+          image: "/banner/grocery-banner-img-two.jpg",
+        },
+      ],
     },
   },
   bakery: {
     title: "Bakery - PickBazar",
     description: "Bakery Details",
     banner: {
-      heading: "Get Your Bakery Items Delivered",
-      subheading:
-        "Get your favorite bakery items baked and delivered to your doorsteps at any time",
+      heading: "heading-bakery",
+      subheading: "subheading-bakery",
       image: "/banner/bakery.jpg",
     },
   },
@@ -41,9 +58,8 @@ export const sitePages: Record<PageName, PageInfo> = {
     title: "Makeup - PickBazar",
     description: "Makeup Details",
     banner: {
-      heading: "Branded & imported makeups",
-      subheading:
-        "Easiest and cheapest way to get your branded & imported makeups",
+      heading: "heading-makeup",
+      subheading: "subheading-makeup",
       image: "/banner/makeup.png",
     },
   },
@@ -51,9 +67,8 @@ export const sitePages: Record<PageName, PageInfo> = {
     title: "Bags - PickBazar",
     description: "Bags Details",
     banner: {
-      heading: "Exclusive Branded bags",
-      subheading:
-        "Get your exclusive & branded bags delivered to you in no time",
+      heading: "heading-bags",
+      subheading: "subheading-bags",
       image: "/banner/bags.png",
     },
   },
@@ -61,9 +76,8 @@ export const sitePages: Record<PageName, PageInfo> = {
     title: "Clothing - PickBazar",
     description: "Clothing Details",
     banner: {
-      heading: "Shop your designer dresses",
-      subheading:
-        "Ready to wear dresses tailored for you from online. Hurry up while stock lasts.",
+      heading: "heading-clothing",
+      subheading: "subheading-clothing",
       image: "/banner/cloths.png",
     },
   },
@@ -71,10 +85,21 @@ export const sitePages: Record<PageName, PageInfo> = {
     title: "Furniture - PickBazar",
     description: "Furniture Details",
     banner: {
-      heading: "Exclusive furniture on cheap price",
-      subheading:
-        "Make your house a home with our wide collection of beautiful furniture",
+      heading: "heading-furniture",
+      subheading: "subheading-furniture",
       image: "/banner/furniture.png",
+      gallery: [
+        {
+          id: 1,
+          title: "Exclusives Furniture",
+          image: "/banner/furniture-banner-1.jpg",
+        },
+        {
+          id: 2,
+          title: "Exclusives Furniture",
+          image: "/banner/furniture-banner-2.jpg",
+        },
+      ],
     },
   },
 };

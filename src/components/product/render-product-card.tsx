@@ -17,10 +17,6 @@ export default function renderProductCard(product: any, className = "") {
       return <Xenon product={product} className={className} />;
     case "furniture":
       return <Krypton product={product} className={className} />;
-    // case "bags":
-    //   return <Radon product={product} />;
-    // case "makeup":
-    //   return <Krypton product={product} />;
     default:
       return <Helium product={product} className={className} />;
   }

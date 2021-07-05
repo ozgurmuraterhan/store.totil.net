@@ -10,7 +10,11 @@ import { useCategoriesQuery } from "@data/category/use-categories.query";
 export default function MobileCategoryMenu() {
   const { query } = useRouter();
   const { type } = query;
-  const { isLoading: loading, data, error } = useCategoriesQuery({
+  const {
+    isLoading: loading,
+    data,
+    error,
+  } = useCategoriesQuery({
     type: type as string,
   });
 
@@ -33,7 +37,7 @@ export default function MobileCategoryMenu() {
             <SidebarMenu items={data?.categories?.data} className="py-3 px-6" />
           ) : (
             <div className="min-h-full pt-6 pb-8 px-4 lg:p-8">
-              <NotFound text="Sorry, No Category Found :(" className="h-96" />
+              <NotFound text="text-not-found" className="h-96" />
             </div>
           )}
         </Scrollbar>

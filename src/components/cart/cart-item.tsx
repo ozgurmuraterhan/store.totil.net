@@ -5,6 +5,7 @@ import Counter from "@components/ui/counter";
 import { CloseIcon } from "@components/icons/close-icon";
 import { fadeInOut } from "@utils/motion/fade-in-out";
 import usePrice from "@utils/use-price";
+import { useTranslation } from "next-i18next";
 import { useCart } from "@contexts/quick-cart/cart.context";
 
 interface CartItemProps {
@@ -12,12 +13,9 @@ interface CartItemProps {
 }
 
 const CartItem = ({ item }: CartItemProps) => {
-  const {
-    isInStock,
-    clearItemFromCart,
-    addItemToCart,
-    removeItemFromCart,
-  } = useCart();
+  const { t } = useTranslation("common");
+  const { isInStock, clearItemFromCart, addItemToCart, removeItemFromCart } =
+    useCart();
 
   const { price } = usePrice({
     amount: item.price,
@@ -42,7 +40,7 @@ const CartItem = ({ item }: CartItemProps) => {
       animate="to"
       exit="from"
       variants={fadeInOut(0.25)}
-      className="flex items-center py-4 px-4 sm:px-6 text-sm border-b border-solid border-gray-200 border-opacity-75"
+      className="flex items-center py-4 px-4 sm:px-6 text-sm border-b border-solid border-border-200 border-opacity-75"
     >
       <div className="flex-shrink-0">
         <Counter
@@ -63,17 +61,17 @@ const CartItem = ({ item }: CartItemProps) => {
       </div>
       <div>
         <h3 className="font-bold text-heading">{item.name}</h3>
-        <p className="my-2.5 font-semibold text-primary">{price}</p>
-        <span className="text-xs text-gray-500">
+        <p className="my-2.5 font-semibold text-accent">{price}</p>
+        <span className="text-xs text-body">
           {item.quantity} X {item.unit}
         </span>
       </div>
-      <span className="ml-auto font-bold text-heading">{itemPrice}</span>
+      <span className="ms-auto font-bold text-heading">{itemPrice}</span>
       <button
-        className="w-7 h-7 ml-3 -mr-2 flex items-center justify-center rounded-full text-gray-400 transition-all duration-200 focus:outline-none hover:bg-gray-100 focus:bg-gray-100 hover:text-red-600 focus:text-red-600"
-        onClick={() => clearItemFromCart(item.id)}
+        className="w-7 h-7 ms-3 -me-2 flex items-center justify-center rounded-full text-muted transition-all duration-200 focus:outline-none hover:bg-gray-100 focus:bg-gray-100 hover:text-red-600 focus:text-red-600"
+        onClick={() => clearItemFromCart(item?.id)}
       >
-        <span className="sr-only">close</span>
+        <span className="sr-only">{t("text-close")}</span>
         <CloseIcon className="w-3 h-3" />
       </button>
     </motion.div>

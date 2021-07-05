@@ -3,6 +3,7 @@ import cn from "classnames";
 import Link from "@components/ui/link";
 import { Eye } from "@components/icons/eye-icon";
 import { EyeOff } from "@components/icons/eye-off-icon";
+import { useTranslation } from "next-i18next";
 
 export interface Props extends InputHTMLAttributes<HTMLInputElement> {
   className?: string;
@@ -13,16 +14,15 @@ export interface Props extends InputHTMLAttributes<HTMLInputElement> {
   shadow?: boolean;
   variant?: "normal" | "solid" | "outline";
   error: string | undefined;
-  // onChange?: (...args: any[]) => any;
   forgotPageRouteOnClick?: () => void;
 }
 
 const variantClasses = {
   normal:
-    "bg-gray-100 border border-gray-300 focus:shadow focus:bg-white focus:border-primary",
+    "bg-gray-100 border border-border-base focus:shadow focus:bg-light focus:border-accent",
   solid:
-    "bg-gray-100 border border-gray-100 focus:bg-white focus:border-primary",
-  outline: "border border-gray-300 focus:border-primary",
+    "bg-gray-100 border border-border-100 focus:bg-light focus:border-accent",
+  outline: "border border-border-base focus:border-accent",
 };
 
 const PasswordInput = React.forwardRef<HTMLInputElement, Props>(
@@ -39,18 +39,13 @@ const PasswordInput = React.forwardRef<HTMLInputElement, Props>(
       type = "text",
       forgotPageLink = "",
       forgotPageRouteOnClick,
-      // onChange,
       ...rest
     },
     ref
   ) => {
+    const { t } = useTranslation();
     const [show, setShow] = useState(false);
-    // const handleOnChange = (e: any) => {
-    //   if (onChange) {
-    //     onChange(e.target.value);
-    //   }
-    //   return null;
-    // };
+
     return (
       <div className={className}>
         <div className="flex items-center justify-between mb-2">
@@ -61,18 +56,18 @@ const PasswordInput = React.forwardRef<HTMLInputElement, Props>(
           {forgotPageLink && (
             <Link
               href={forgotPageLink}
-              className="text-sm text-primary transition-colors duration-200 focus:outline-none focus:text-blue-500 hover:text-primary-2"
+              className="text-xs text-accent transition-colors duration-200 focus:outline-none focus:text-accent-700 focus:font-semibold hover:text-accent-hover"
             >
-              Forgot password?
+              {t("common:text-forgot-password")}
             </Link>
           )}
           {forgotPageRouteOnClick && (
             <button
               onClick={forgotPageRouteOnClick}
               type="button"
-              className="text-sm text-primary transition-colors duration-200 focus:outline-none focus:text-blue-500 hover:text-primary-2"
+              className="text-xs text-accent transition-colors duration-200 focus:outline-none focus:text-accent-700 focus:font-semibold hover:text-accent-hover"
             >
-              Forgot password?
+              {t("common:text-forgot-password")}
             </button>
           )}
         </div>
@@ -83,12 +78,11 @@ const PasswordInput = React.forwardRef<HTMLInputElement, Props>(
             type={show ? "text" : "password"}
             ref={ref}
             className={cn(
-              "py-3 pl-4 pr-11 w-full rounded appearance-none transition duration-300 ease-in-out text-heading text-sm focus:outline-none focus:ring-0",
+              "py-3 ps-4 pe-11 w-full rounded appearance-none transition duration-300 ease-in-out text-heading text-sm focus:outline-none focus:ring-0",
               shadow && "focus:shadow",
               variantClasses[variant],
               inputClassName
             )}
-            // onChange={handleOnChange}
             autoComplete="off"
             autoCorrect="off"
             autoCapitalize="off"
@@ -97,7 +91,7 @@ const PasswordInput = React.forwardRef<HTMLInputElement, Props>(
           />
           <label
             htmlFor={name}
-            className="absolute right-4 top-5 -mt-2 text-gray-500 cursor-pointer"
+            className="absolute end-4 top-5 -mt-2 text-body cursor-pointer"
             onClick={() => setShow((prev) => !prev)}
           >
             {show ? (

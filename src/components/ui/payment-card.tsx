@@ -1,5 +1,6 @@
 import cn from "classnames";
 import { CloseIcon } from "@components/icons/close-icon";
+import { useTranslation } from "next-i18next";
 
 type PaymentCardProps = {
   id: string;
@@ -26,6 +27,7 @@ const PaymentCard: React.FC<PaymentCardProps> = ({
   onDelete,
   className,
 }) => {
+  const { t } = useTranslation("common");
   const htmlFor = `${name}-${id}`;
   const cardLogo = `/${[cardType]}.png`;
 
@@ -60,23 +62,21 @@ const PaymentCard: React.FC<PaymentCardProps> = ({
 
       <span className="grid">
         <img className="mb-5" src={cardLogo} alt={cardType} />
-        <span className="text-xs mb-2 text-gray-500">Card Number</span>
-        <span className="text-gray-800 mb-1.5 flex items-center justify-between">
+        <span className="text-xs mb-2 text-body">{t("text-card-number")}</span>
+        <span className="text-heading mb-1.5 flex items-center justify-between">
           <span>****</span>
           <span>****</span>
           <span>****</span>
           <span className="text-xs font-bold">{lastFourDigit}</span>
         </span>
-        <span className="text-xs text-gray-800 font-bold">
-          {cardHolderName}
-        </span>
+        <span className="text-xs text-heading font-bold">{cardHolderName}</span>
       </span>
 
       {onDelete && (
         <span
           title="Delete"
           onClick={onDelete}
-          className="flex items-center justify-center w-5 h-5 rounded-full bg-red-600 text-white absolute top-2.5 right-2.5 transition duration-200 opacity-0 group-hover:opacity-100 focus:outline-none hover:opacity-75"
+          className="flex items-center justify-center w-5 h-5 rounded-full bg-red-600 text-light absolute top-2.5 end-2.5 transition duration-200 opacity-0 group-hover:opacity-100 focus:outline-none hover:opacity-75"
         >
           <CloseIcon width="8.003" height="8" />
         </span>

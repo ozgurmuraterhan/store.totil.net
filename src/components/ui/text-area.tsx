@@ -13,10 +13,10 @@ export interface Props extends TextareaHTMLAttributes<HTMLTextAreaElement> {
 
 const variantClasses = {
   normal:
-    "bg-gray-100 border border-gray-300 focus:shadow focus:bg-white focus:border-primary",
+    "bg-gray-100 border border-border-base focus:shadow focus:bg-light focus:border-accent",
   solid:
-    "bg-gray-100 border border-gray-100 focus:bg-white focus:border-primary",
-  outline: "border border-gray-300 focus:border-primary",
+    "bg-gray-100 border border-border-100 focus:bg-light focus:border-accent",
+  outline: "border border-border-base focus:border-accent",
 };
 
 const TextArea = React.forwardRef<HTMLTextAreaElement, Props>((props, ref) => {
@@ -30,13 +30,12 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, Props>((props, ref) => {
     inputClassName,
     ...rest
   } = props;
-
   return (
     <div className={className}>
       {label && (
         <label
           htmlFor={name}
-          className="block text-gray-600 font-semibold text-sm leading-none mb-3"
+          className="block text-body-dark font-semibold text-sm leading-none mb-3"
         >
           {label}
         </label>

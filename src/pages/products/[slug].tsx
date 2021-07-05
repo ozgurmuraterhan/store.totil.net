@@ -7,6 +7,9 @@ import { fetchProducts } from "@data/product/use-products.query";
 import { fetchProduct } from "@data/product/use-product.query";
 import { Product } from "@ts-types/custom.types";
 import dynamic from "next/dynamic";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
+
 import RelatedProducts from "@components/product/product-details/related-products";
 const CartCounterButton = dynamic(
   () => import("@components/cart/cart-counter-button"),
@@ -26,13 +29,14 @@ export async function getStaticPaths() {
     fallback: true,
   };
 }
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+export const getStaticProps: GetStaticProps = async ({ params, locale }) => {
   const slug = params?.slug as string;
   try {
     const product = await fetchProduct(slug);
     return {
       props: {
         product,
+        ...(await serverSideTranslations(locale!, ["common"])),
       },
       revalidate: 1,
     };
@@ -45,16 +49,17 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
 export default function ProductSinglePage({ product }: any) {
   const router = useRouter();
+  const { t } = useTranslation("common");
 
   // If the page is not yet generated, this will be displayed
   // initially until getStaticProps() finishes running
   if (router.isFallback) {
-    return <Spinner />;
+    return <Spinner text={t("common:text-loading")} />;
   }
 
   return (
     <>
-      <div className="bg-white min-h-screen">
+      <div className="bg-light min-h-screen">
         <ProductDetails product={product} />
 
         {product?.related_products?.length > 1 && (

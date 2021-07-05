@@ -9,7 +9,11 @@ import { useCategoriesQuery } from "@data/category/use-categories.query";
 const CategoryDropdownSidebar = () => {
   const { query } = useRouter();
   const { type } = query;
-  const { data, isLoading: loading, error } = useCategoriesQuery({
+  const {
+    data,
+    isLoading: loading,
+    error,
+  } = useCategoriesQuery({
     type: type as string,
   });
 
@@ -25,7 +29,7 @@ const CategoryDropdownSidebar = () => {
   if (error) return <ErrorMessage message={error.message} />;
 
   return (
-    <aside className="sticky top-22 h-full lg:w-72 hidden xl:block bg-white">
+    <aside className="sticky top-22 h-full lg:w-72 hidden xl:block bg-light">
       <div className="max-h-full overflow-hidden">
         <Scrollbar className="w-full h-full max-h-screen">
           {data?.categories?.data?.length ? (
@@ -34,7 +38,7 @@ const CategoryDropdownSidebar = () => {
             </div>
           ) : (
             <div className="min-h-full pt-6 pb-8 px-9 lg:p-8">
-              <NotFound text="Sorry, No Category Found :(" className="h-96" />
+              <NotFound text="text-no-category" className="h-96" />
             </div>
           )}
         </Scrollbar>

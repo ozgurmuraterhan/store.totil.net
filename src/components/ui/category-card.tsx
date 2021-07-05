@@ -20,8 +20,8 @@ const CategoryCard: React.FC<CategoryCardProps> = ({
     ? "shadow-sm border-gray-700"
     : "border-transparent";
   const activeTextStyle = active
-    ? "font-semibold text-gray-800"
-    : "font-normal text-gray-700";
+    ? "font-semibold text-heading"
+    : "font-normal text-sub-heading";
 
   return (
     <div

@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import renderProductCard from "@components/product/render-product-card";
 import cn from "classnames";
+import { useTranslation } from "next-i18next";
 interface Props {
   products: any;
   currentProductId: any;
@@ -12,10 +13,11 @@ const RelatedProducts = ({
   currentProductId,
   gridClassName,
 }: Props) => {
+  const { t } = useTranslation("common");
   return (
     <>
       <h2 className="text-lg text-heading tracking-tight font-semibold mb-6">
-        Related Products
+        {t("text-related-products")}
       </h2>
       <div
         className={cn(
@@ -31,7 +33,7 @@ const RelatedProducts = ({
             <motion.div key={idx}>
               {renderProductCard(
                 item,
-                "!shadow-none border border-gray-200 hover:!border-gray-200 border-opacity-70"
+                "!shadow-none border border-border-200 hover:!border-border-200 border-opacity-70"
               )}
             </motion.div>
           );

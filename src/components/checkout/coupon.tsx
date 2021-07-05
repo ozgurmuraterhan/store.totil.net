@@ -4,8 +4,10 @@ import Button from "@components/ui/button";
 import { useForm } from "react-hook-form";
 import { useCheckout } from "@contexts/checkout.context";
 import { useVerifyCouponMutation } from "@data/coupon/verify-coupon.mutation";
+import { useTranslation } from "next-i18next";
 
 const Coupon = () => {
+  const { t } = useTranslation("common");
   const [hasCoupon, setHasCoupon] = useState(false);
   const {
     register,
@@ -14,19 +16,17 @@ const Coupon = () => {
 
     formState: { errors },
   } = useForm();
-  const {
-    mutate: verifyCoupon,
-    isLoading: loading,
-  } = useVerifyCouponMutation();
+  const { mutate: verifyCoupon, isLoading: loading } =
+    useVerifyCouponMutation();
   const { applyCoupon, coupon } = useCheckout();
   if (!hasCoupon && !coupon) {
     return (
       <p
         role="button"
-        className="text-xs font-bold text-body transition duration-200 hover:text-primary"
+        className="text-xs font-bold text-body transition duration-200 hover:text-accent"
         onClick={() => setHasCoupon(true)}
       >
-        Do you have a coupon?
+        {t("text-have-coupon")}
       </p>
     );
   }
@@ -43,21 +43,12 @@ const Coupon = () => {
           } else {
             setError("code", {
               type: "manual",
-              message: "Invalid coupon code! please try again.",
+              message: "error-invalid-coupon",
             });
           }
         },
       }
     );
-    // if (data?.verifyCoupon?.is_valid) {
-    //   applyCoupon(data?.verifyCoupon?.coupon);
-    //   setHasCoupon(false);
-    // } else if (!data?.verifyCoupon?.is_valid) {
-    //   setError("code", {
-    //     type: "manual",
-    //     message: "Invalid coupon code! please try again.",
-    //   });
-    // }
   }
 
   return (
@@ -67,12 +58,12 @@ const Coupon = () => {
       className="w-full flex flex-col sm:flex-row"
     >
       <Input
-        {...register("code", { required: "Coupon code is required" })}
-        placeholder="Enter coupon code here"
+        {...register("code", { required: "text-coupon-required" })}
+        placeholder={t("text-enter-coupon")}
         variant="outline"
-        className="mb-4 sm:mb-0 sm:mr-4 flex-1"
+        className="mb-4 sm:mb-0 sm:me-4 flex-1"
         dimension="small"
-        error={errors?.code?.message}
+        error={t(errors?.code?.message!)}
       />
       <Button
         loading={loading}
@@ -80,7 +71,7 @@ const Coupon = () => {
         size="small"
         className="w-full sm:w-40 lg:w-auto"
       >
-        Apply
+        {t("text-apply")}
       </Button>
     </form>
   );

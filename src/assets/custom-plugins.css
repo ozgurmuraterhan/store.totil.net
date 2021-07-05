@@ -24,7 +24,7 @@
 }
 
 .rc-table tr th {
-  @apply border-0 border-b border-gray-200;
+  @apply border-0 border-b border-border-200;
 }
 
 .rc-table tr td {
@@ -32,7 +32,7 @@
 }
 
 .rc-table thead.rc-table-thead th {
-  @apply bg-gray-100 py-3 px-4 font-body font-bold text-sm text-heading border-gray-200;
+  @apply bg-gray-100 py-3 px-4 font-body font-bold text-sm text-heading border-border-200;
 }
 
 .rc-table tr.rc-table-row:hover {
@@ -61,7 +61,7 @@
 
 /* Product Single Page thumb slider style */
 .product-gallery .swiper-container-thumbs .swiper-slide-thumb-active {
-  @apply border-2 border-primary;
+  @apply border-2 border-accent;
 }
 .product-gallery .swiper-button-disabled {
   @apply opacity-0 transition-opacity duration-200;

@@ -4,11 +4,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { MinusIcon } from "@components/icons/minus-icon";
 import { PlusIcon } from "@components/icons/plus-icon";
 import { heightCollapse } from "@utils/motion/height-collapse";
+import { useTranslation } from "next-i18next";
 
 type CollapseProps = {
   i: number;
   title: string;
   content: string;
+  translatorNS: string;
   expanded: number;
   setExpanded: any;
 };
@@ -19,15 +21,18 @@ const Collapse: React.FC<CollapseProps> = ({
   setExpanded,
   title,
   content,
+  translatorNS,
 }) => {
   const isOpen = i === expanded;
   // active state style
   const activeClass = isOpen ? "shadow-sm" : "";
 
+  const { t } = useTranslation(translatorNS);
+
   return (
     <div
       className={cn(
-        "border border-solid border-gray-200 bg-white rounded mb-2.5 transition-all hover:border-gray-300",
+        "border border-solid border-border-200 bg-light rounded mb-2.5 transition-all hover:border-border-base",
         activeClass
       )}
     >
@@ -37,7 +42,7 @@ const Collapse: React.FC<CollapseProps> = ({
         className="py-4 px-5 rounded cursor-pointer flex items-center justify-between transition-colors"
       >
         <h2 className="text-sm md:text-base font-semibold leading-relaxed text-heading">
-          {title}
+          {t(title)}
         </h2>
         {isOpen ? (
           <MinusIcon
@@ -58,8 +63,8 @@ const Collapse: React.FC<CollapseProps> = ({
             exit="from"
             variants={heightCollapse()}
           >
-            <div className="md:pt-1 pb-4 px-5 leading-7 text-sm md:text-base md:leading-loose text-gray-600">
-              {content}
+            <div className="md:pt-1 pb-4 px-5 leading-7 text-sm md:text-base md:leading-loose text-body-dark">
+              {t(content)}
             </div>
           </motion.div>
         )}
@@ -69,13 +74,14 @@ const Collapse: React.FC<CollapseProps> = ({
 };
 
 type AccordionProps = {
+  translatorNS: string;
   items: {
     title: string;
     content: string;
   }[];
 };
 
-const Accordion: React.FC<AccordionProps> = ({ items }) => {
+const Accordion: React.FC<AccordionProps> = ({ items, translatorNS }) => {
   const [expanded, setExpanded] = useState<number>(0);
 
   return (
@@ -88,6 +94,7 @@ const Accordion: React.FC<AccordionProps> = ({ items }) => {
           content={item.content}
           expanded={expanded}
           setExpanded={setExpanded}
+          translatorNS={translatorNS}
         />
       ))}
     </>

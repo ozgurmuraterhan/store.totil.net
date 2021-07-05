@@ -8,6 +8,7 @@ import Card from "@components/ui/card";
 import { GetServerSideProps } from "next";
 import { parseContextCookie } from "@utils/parse-cookie";
 import Spinner from "@components/ui/loaders/spinner/spinner";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 export const getServerSideProps: GetServerSideProps = async (context: any) => {
   const cookies = parseContextCookie(context?.req?.headers?.cookie);
@@ -15,7 +16,9 @@ export const getServerSideProps: GetServerSideProps = async (context: any) => {
     return { redirect: { destination: "/", permanent: false } };
   }
   return {
-    props: {},
+    props: {
+      ...(await serverSideTranslations(context.locale, ["common", "forms"])),
+    },
   };
 };
 
@@ -24,7 +27,7 @@ export default function ProfilePage() {
   if (error) return <ErrorMessage message={error.message} />;
   return (
     <div className="flex flex-col xl:flex-row items-start max-w-1920 w-full mx-auto py-10 px-8 xl:py-14 xl:px-16 2xl:px-20 bg-gray-100">
-      <ProfileSidebar className="flex-shrink-0 hidden xl:block xl:w-80 mr-10" />
+      <ProfileSidebar className="flex-shrink-0 hidden xl:block xl:w-80 me-10" />
       {/* End of sidebar navigation */}
       {loading ? (
         <Spinner showText={false} />
@@ -37,7 +40,7 @@ export default function ProfilePage() {
             <Address
               id={data?.me?.id!}
               addresses={data?.me?.address!}
-              heading="Addresses"
+              heading="text-addresses"
               type="billing"
             />
           </Card>

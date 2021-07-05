@@ -18,14 +18,14 @@ const ProductAttributes = ({
     <>
       {Object.keys(variations).map((variationName, index) => (
         <div
-          className="py-4 border-b border-gray-200  border-opacity-70 first:pt-0 flex items-center"
+          className="py-4 border-b border-border-200  border-opacity-70 first:pt-0 flex items-center"
           key={index}
         >
-          <span className="text-sm font-semibold text-heading leading-none capitalize mr-4 min-w-[60px] inline-block">
+          <span className="text-sm font-semibold text-heading leading-none capitalize me-4 min-w-[60px] inline-block">
             {variationName}:
           </span>
 
-          <div className="w-full flex space-x-4 overflow-x-auto">
+          <div className="w-full flex space-s-4 overflow-x-auto">
             {variations[variationName].map((attribute: any) => (
               <RadioGroup
                 className={variationName}

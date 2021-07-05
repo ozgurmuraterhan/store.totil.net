@@ -17,20 +17,20 @@ import dynamic from "next/dynamic";
 import ProductAttributes from "./product-details/product-attributes";
 import ProductCategories from "./product-details/product-categories";
 import VariationPrice from "./product-details/product-variant-price";
+import { useTranslation } from "next-i18next";
+import { useModalAction } from "@components/ui/modal/modal.context";
+import { ROUTES } from "@utils/routes";
 const RelatedProducts = dynamic(
   () => import("./product-details/related-products")
 );
 
 const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
   const router = useRouter();
+  const { t } = useTranslation("common");
 
-  const {
-    showModalStickyBar,
-    hideModalStickyBar,
-    displayModalStickyBar,
-    closeModal,
-  } = useUI();
-
+  const { showModalStickyBar, hideModalStickyBar, displayModalStickyBar } =
+    useUI();
+  const { closeModal } = useModalAction();
   const { data, isLoading: loading } = useProductQuery(productSlug);
 
   const {
@@ -47,9 +47,15 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
     min_price,
     max_price,
     related_products,
+    shop,
   } = data ?? {};
 
   const handleTitleClick = (path: string) => {
+    router.push(path);
+    closeModal();
+  };
+
+  const navigate = (path: string) => {
     router.push(path);
     closeModal();
   };
@@ -70,7 +76,7 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
       )
     : true;
 
-  let selectedVariation = {};
+  let selectedVariation: any = {};
   if (isSelected) {
     selectedVariation = data?.variation_options?.find((o) =>
       isEqual(
@@ -90,17 +96,17 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
 
   if (loading)
     return (
-      <div className="w-96 flex justify-center items-center h-96 bg-white relative">
-        <Spinner />
+      <div className="w-96 flex justify-center items-center h-96 bg-light relative">
+        <Spinner text={t("common:text-loading")} />
       </div>
     );
 
   return (
-    <article className="bg-white w-full max-w-6xl relative z-[51]">
+    <article className="bg-light w-full max-w-6xl relative z-[51]">
       {/* Sticky bar */}
       <div
         className={cn(
-          "max-w-6xl h-auto hidden md:block bg-white fixed top-0 left-1/2 transform -translate-x-1/2 z-50 px-8 py-6 shadow-350 transition-all duration-300",
+          "max-w-6xl h-auto hidden md:block bg-light fixed top-0 start-1/2 transform -translate-x-1/2 z-50 px-8 py-6 shadow-350 transition-all duration-300",
           {
             "invisible opacity-0 -translate-y-1/2": !displayModalStickyBar,
             "visible opacity-100 translate-y-0": displayModalStickyBar,
@@ -111,7 +117,7 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
         <div className="flex items-center">
           <div
             className={cn(
-              "border border-gray-200 border-opacity-70 rounded relative flex items-center justify-center overflow-hidden flex-shrink-0",
+              "border border-border-200 border-opacity-70 rounded relative flex items-center justify-center overflow-hidden flex-shrink-0",
               {
                 "w-28 h-28": isEmpty(variations),
                 "w-40 lg:w-52 h-40 lg:h-52": !isEmpty(variations),
@@ -127,7 +133,7 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
             />
           </div>
 
-          <div className="px-8 flex flex-col justify-center mr-auto overflow-hidden">
+          <div className="px-8 flex flex-col justify-center me-auto overflow-hidden">
             <h3
               className="font-semibold text-lg lg:text-xl tracking-tight text-heading truncate cursor-pointer"
               onClick={() => handleTitleClick(`/products/${slug}`)}
@@ -160,12 +166,12 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
             })}
           >
             {isEmpty(variations) && (
-              <span className="mr-8 flex items-center ">
-                <ins className="text-xl lg:text-2xl font-semibold text-primary no-underline">
+              <span className="me-8 flex items-center ">
+                <ins className="text-xl lg:text-2xl font-semibold text-accent no-underline">
                   {basePrice ? basePrice : price}
                 </ins>
                 {discount && (
-                  <del className="text-sm lg:text-base font-normal text-gray-400 ml-2">
+                  <del className="text-sm lg:text-base font-normal text-muted ms-2">
                     {price}
                   </del>
                 )}
@@ -174,7 +180,7 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
 
             <div className="w-full">
               <div
-                className={cn("flex flex-col overflow-y-auto", {
+                className={cn("flex flex-col overflow-y-auto justify-center", {
                   "h-[140px]": !isEmpty(variations),
                 })}
               >
@@ -194,8 +200,8 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
                     disabled={selectedVariation?.is_disable || !isSelected}
                   />
                 ) : (
-                  <div className="bg-red-500 rounded text-sm text-white px-3 py-2">
-                    Out Of Stock
+                  <div className="bg-red-500 rounded text-sm text-light px-3 py-2">
+                    {t("text-out-stock")}
                   </div>
                 )}
               </div>
@@ -207,12 +213,11 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
       {/* End of sticky bar */}
 
       {/* Main content */}
-      <div className="flex flex-col md:flex-row border-b border-gray-200 border-opacity-70">
-        {/* <div className="lg:w-1/2 p-6 pt-8 lg:p-12 2xl:p-16 lg:border-r lg:border-gray-200 lg:border-opacity-60"> */}
+      <div className="flex flex-col md:flex-row border-b border-border-200 border-opacity-70">
         <div className="md:w-1/2 p-5 md:pt-10 lg:p-14 xl:p-16">
           <div className="product-gallery h-full relative">
             {discount && (
-              <div className="rounded-full text-xs leading-6 font-semibold px-3 bg-yellow-500 text-white absolute top-4 right-4 z-10">
+              <div className="rounded-full text-xs leading-6 font-semibold px-3 bg-yellow-500 text-light absolute top-4 end-4 z-10">
                 {discount}
               </div>
             )}
@@ -273,12 +278,12 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
                     />
                   ) : (
                     <span className="flex items-center">
-                      <ins className="text-2xl md:text-3xl font-semibold text-primary no-underline">
+                      <ins className="text-2xl md:text-3xl font-semibold text-accent no-underline">
                         {basePrice ? basePrice : price}
                       </ins>
                       {/* use del price markup when product has discount price */}
                       {discount && (
-                        <del className="text-sm md:text-base font-normal text-gray-400 ml-2">
+                        <del className="text-sm md:text-base font-normal text-muted ms-2">
                           {price}
                         </del>
                       )}
@@ -309,22 +314,24 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
                   {quantity! > 0 ? (
                     <>
                       {isEmpty(variations) && (
-                        <span className="text-base text-body whitespace-nowrap ml-7">
-                          {quantity} pieces available
+                        <span className="text-base text-body whitespace-nowrap ms-7">
+                          {quantity} {t("text-pieces-available")}
                         </span>
                       )}
                       {!isEmpty(selectedVariation) && (
-                        <span className="text-base text-body whitespace-nowrap ml-7">
+                        <span className="text-base text-body whitespace-nowrap ms-7">
                           {selectedVariation?.is_disable ||
                           selectedVariation.quantity === 0
                             ? "Out Of Stock"
-                            : `${selectedVariation.quantity} pieces available`}
+                            : `${selectedVariation.quantity} ${t(
+                                "text-pieces-available"
+                              )}`}
                         </span>
                       )}
                     </>
                   ) : (
-                    <div className="text-base text-red-500 whitespace-nowrap ml-7">
-                      Out Of Stock
+                    <div className="text-base text-red-500 whitespace-nowrap ms-7">
+                      {t("text-out-stock")}
                     </div>
                   )}
                 </div>
@@ -336,6 +343,21 @@ const ProductDetailsModalView = ({ productSlug }: { productSlug: string }) => {
                   basePath={`/${type?.slug}`}
                   onClose={closeModal}
                 />
+              )}
+
+              {shop?.name && (
+                <div className="flex items-center mt-2">
+                  <span className="text-sm font-semibold text-heading capitalize me-6 py-1">
+                    {t("common:text-sellers")}
+                  </span>
+
+                  <button
+                    onClick={() => navigate(`${ROUTES.SHOPS}/${shop?.slug}`)}
+                    className="text-sm text-accent tracking-wider transition underline hover:text-accent-hover hover:no-underline"
+                  >
+                    {shop?.name}
+                  </button>
+                </div>
               )}
             </div>
           </Waypoint>

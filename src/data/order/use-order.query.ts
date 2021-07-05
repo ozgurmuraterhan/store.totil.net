@@ -3,7 +3,7 @@ import { useQuery } from "react-query";
 import { OrderService } from "./order.service";
 
 export const fetchOrder = async (orderId: string) => {
-  const { data } = await OrderService.findOne(orderId);
+  const { data } = await OrderService.findOne(`tracking_number/${orderId}`);
   return {
     order: data,
   };

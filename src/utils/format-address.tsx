@@ -1,18 +1,15 @@
 import { UserAddress } from "@ts-types/custom.types";
 
-function removeEmpty(obj: any): any {
-  return Object.entries(obj)
-    .filter(([_, v]) => v != null)
-    .reduce(
-      (acc, [k, v]) => ({ ...acc, [k]: v === Object(v) ? removeEmpty(v) : v }),
-      {}
-    );
+function removeFalsy(obj: any) {
+  return Object.fromEntries(Object.entries(obj).filter(([_, v]) => Boolean(v)));
 }
 
 export function formatAddress(address: UserAddress) {
-  let formattedAddress = {};
-  if (address) {
-    formattedAddress = removeEmpty(address);
-  }
-  return Object.values(formattedAddress).slice(1).reverse().join(", ");
+  if (!address) return;
+  const temp = ["street_address", "state", "city", "zip", "country"].reduce(
+    (acc, k) => ({ ...acc, [k]: (address as any)[k] }),
+    {}
+  );
+  const formattedAddress = removeFalsy(temp);
+  return Object.values(formattedAddress).join(", ");
 }

@@ -15,11 +15,11 @@ export interface Props extends InputHTMLAttributes<HTMLInputElement> {
 
 const variantClasses = {
   normal:
-    "bg-gray-100 border border-gray-300 rounded focus:shadow focus:bg-white focus:border-primary",
+    "bg-gray-100 border border-border-base rounded focus:shadow focus:bg-light focus:border-accent",
   solid:
-    "bg-gray-100 border border-gray-100 rounded focus:bg-white focus:border-primary",
-  outline: "border border-gray-300 rounded focus:border-primary",
-  line: "pl-0 border-b border-gray-300 rounded-none focus:border-primary",
+    "bg-gray-100 border border-border-100 rounded focus:bg-light focus:border-accent",
+  outline: "border border-border-base rounded focus:border-accent",
+  line: "ps-0 border-b border-border-base rounded-none focus:border-accent",
 };
 
 const sizeClasses = {
@@ -51,7 +51,7 @@ const Input = React.forwardRef<HTMLInputElement, Props>(
         {label && (
           <label
             htmlFor={name}
-            className="block text-gray-600 font-semibold text-sm leading-none mb-3"
+            className="block text-body-dark font-semibold text-sm leading-none mb-3"
           >
             {label}
           </label>

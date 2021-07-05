@@ -3,6 +3,7 @@ import BackButton from "@components/ui/back-button";
 import { AddToCart } from "@components/product/add-to-cart/add-to-cart";
 import usePrice from "@utils/use-price";
 import { ThumbsCarousel } from "@components/ui/carousel";
+import { useTranslation } from "next-i18next";
 import { getVariations } from "@utils/get-variations";
 import { useState } from "react";
 import isEqual from "lodash/isEqual";
@@ -12,6 +13,8 @@ import { scroller, Element } from "react-scroll";
 import ProductCategories from "./product-details/product-categories";
 import VariationPrice from "./product-details/product-variant-price";
 import ProductAttributes from "./product-details/product-attributes";
+import { useRouter } from "next/router";
+import { ROUTES } from "@utils/routes";
 
 type Props = {
   product: any;
@@ -19,6 +22,7 @@ type Props = {
 };
 
 const ProductDetails: React.FC<Props> = ({ product }) => {
+  const router = useRouter();
   const {
     name,
     image, //could only had image we need to think it also
@@ -28,13 +32,19 @@ const ProductDetails: React.FC<Props> = ({ product }) => {
     gallery,
     type,
     quantity,
+    shop,
   } = product ?? {};
 
+  const { t } = useTranslation("common");
   const [attributes, setAttributes] = useState<{ [key: string]: string }>({});
   const { price, basePrice, discount } = usePrice({
     amount: product?.price,
     baseAmount: product?.sale_price,
   });
+
+  const navigate = (path: string) => {
+    router.push(path);
+  };
 
   const variations = getVariations(product?.variations);
 
@@ -67,13 +77,13 @@ const ProductDetails: React.FC<Props> = ({ product }) => {
    * {size: "Large", color: "Black", weight: "1kg"}
    */
   return (
-    <article className="rounded-lg bg-white">
-      <div className="flex flex-col md:flex-row border-b border-gray-200 border-opacity-70">
+    <article className="rounded-lg bg-light">
+      <div className="flex flex-col md:flex-row border-b border-border-200 border-opacity-70">
         <div className="md:w-1/2 p-6 pt-8 lg:p-14 xl:p-16">
           <div className="flex items-center justify-between mb-8 lg:mb-10">
             <BackButton />
             {discount && (
-              <div className="rounded-full text-xs leading-6 font-semibold px-3 bg-yellow-500 text-white">
+              <div className="rounded-full text-xs leading-6 font-semibold px-3 bg-yellow-500 text-light">
                 {discount}
               </div>
             )}
@@ -124,18 +134,17 @@ const ProductDetails: React.FC<Props> = ({ product }) => {
                 />
               ) : (
                 <span className="flex items-center">
-                  <ins className="text-2xl md:text-3xl font-semibold text-primary no-underline">
+                  <ins className="text-2xl md:text-3xl font-semibold text-accent no-underline">
                     {basePrice ? basePrice : price}
                   </ins>
                   {discount && (
-                    <del className="text-sm md:text-base font-normal text-gray-400 ml-2">
+                    <del className="text-sm md:text-base font-normal text-muted ms-2">
                       {price}
                     </del>
                   )}
                 </span>
               )}
             </div>
-            {/* end of del price markup  */}
 
             <div>
               <ProductAttributes
@@ -158,22 +167,24 @@ const ProductDetails: React.FC<Props> = ({ product }) => {
               {quantity > 0 ? (
                 <>
                   {isEmpty(variations) && (
-                    <span className="text-base text-body whitespace-nowrap lg:ml-7">
-                      {quantity} pieces available
+                    <span className="text-base text-body whitespace-nowrap lg:ms-7">
+                      {quantity} {t("text-pieces-available")}
                     </span>
                   )}
                   {!isEmpty(selectedVariation) && (
-                    <span className="text-base text-body whitespace-nowrap lg:ml-7">
+                    <span className="text-base text-body whitespace-nowrap lg:ms-7">
                       {selectedVariation?.is_disable ||
                       selectedVariation.quantity === 0
-                        ? "Out Of Stock"
-                        : `${selectedVariation.quantity} pieces available`}
+                        ? t("text-out-stock")
+                        : `${selectedVariation.quantity} ${t(
+                            "text-pieces-available"
+                          )}`}
                     </span>
                   )}
                 </>
               ) : (
-                <div className="text-base text-red-500 whitespace-nowrap lg:ml-7">
-                  Out Of Stock
+                <div className="text-base text-red-500 whitespace-nowrap lg:ms-7">
+                  {t("text-out-stock")}
                 </div>
               )}
             </div>
@@ -185,17 +196,31 @@ const ProductDetails: React.FC<Props> = ({ product }) => {
               basePath={`/${type?.slug}`}
             />
           )}
+
+          {shop?.name && (
+            <div className="flex items-center mt-2">
+              <span className="text-sm font-semibold text-heading capitalize me-6 py-1">
+                {t("common:text-sellers")}
+              </span>
+
+              <button
+                onClick={() => navigate(`${ROUTES.SHOPS}/${shop?.slug}`)}
+                className="text-sm text-accent tracking-wider transition underline hover:text-accent-hover hover:no-underline"
+              >
+                {shop?.name}
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
       <Element
         name="details"
-        className="py-4 px-5 lg:px-16 lg:py-14 border-b border-gray-200 border-opacity-70"
+        className="py-4 px-5 lg:px-16 lg:py-14 border-b border-border-200 border-opacity-70"
       >
         <h2 className="text-lg text-heading tracking-tight font-semibold mb-4 md:mb-6">
-          Details
+          {t("text-details")}
         </h2>
-
         <p className="text-sm text-body">{description}</p>
       </Element>
     </article>

@@ -1,16 +1,16 @@
-import React, { InputHTMLAttributes } from 'react';
-import styles from './checkbox.module.css';
+import React, { InputHTMLAttributes } from "react";
+import styles from "./checkbox.module.css";
 
 export interface Props extends InputHTMLAttributes<HTMLInputElement> {
   className?: string;
   label?: string;
-  name: string;
   error?: string;
+  name: string;
   onChange?: (...args: any[]) => any;
 }
 
 const Checkbox = React.forwardRef<HTMLInputElement, Props>(
-  ({ className, label, name, error, onChange, ...rest }, ref) => {
+  ({ className, label, error, name, onChange, ...rest }, ref) => {
     const handleOnChange = (e: any) => {
       if (onChange) {
         onChange(e.target.value);
@@ -20,25 +20,23 @@ const Checkbox = React.forwardRef<HTMLInputElement, Props>(
 
     return (
       <div className={className}>
-        <div className='flex items-center'>
+        <div className="flex items-center">
           <input
             id={name}
             name={name}
-            type='checkbox'
+            type="checkbox"
             ref={ref}
             onChange={handleOnChange}
             className={styles.checkbox}
             {...rest}
           />
 
-          <label htmlFor={name} className='text-body text-sm'>
+          <label htmlFor={name} className="text-body text-sm">
             {label}
           </label>
         </div>
 
-        {error && (
-          <p className='my-2 text-xs text-right text-red-500'>{error}</p>
-        )}
+        {error && <p className="my-2 text-xs text-end text-red-500">{error}</p>}
       </div>
     );
   }

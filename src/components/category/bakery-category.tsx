@@ -9,13 +9,19 @@ import { ArrowNextIcon } from "@components/icons/arrow-next";
 import { ArrowPrevIcon } from "@components/icons/arrow-prev";
 import { useCategoriesQuery } from "@data/category/use-categories.query";
 import BakeryCategoryLoader from "@components/ui/loaders/bakery-category-loader";
+import { useTranslation } from "next-i18next";
 
 SwiperCore.use([Navigation]);
 
 const BakeryCategory = () => {
+  const { t } = useTranslation("common");
   const router = useRouter();
 
-  const { data, isLoading: loading, error } = useCategoriesQuery({
+  const {
+    data,
+    isLoading: loading,
+    error,
+  } = useCategoriesQuery({
     type: "bakery",
   });
 
@@ -111,10 +117,10 @@ const BakeryCategory = () => {
                 <SwiperSlide key={idx}>
                   <div
                     className={cn(
-                      "text-center rounded bg-white relative overflow-hidden cursor-pointer border-2",
+                      "text-center rounded bg-light relative overflow-hidden cursor-pointer border-2",
                       selectedQueries === category.slug
-                        ? "border-primary"
-                        : "border-white"
+                        ? "border-accent"
+                        : "border-light"
                     )}
                     role="button"
                     onClick={() => onCategoryClick(category?.slug)}
@@ -136,17 +142,19 @@ const BakeryCategory = () => {
                 </SwiperSlide>
               ))}
             </Swiper>
-            <button className="banner-slider-prev w-8 h-8 flex items-center justify-center text-heading bg-white shadow-300 outline-none rounded-full absolute top-1/2 -mt-4 z-10 cursor-pointer -left-4 focus:outline-none">
+            <button className="banner-slider-prev w-8 h-8 flex items-center justify-center text-heading bg-light shadow-300 outline-none rounded-full absolute top-1/2 -mt-4 z-10 cursor-pointer -start-4 focus:outline-none">
+              <span className="sr-only">{t("text-previous")}</span>
               <ArrowPrevIcon />
             </button>
-            <button className="banner-slider-next w-8 h-8 flex items-center justify-center text-heading bg-white shadow-300 outline-none rounded-full absolute top-1/2 -mt-4 z-10 cursor-pointer -right-4 focus:outline-none">
+            <button className="banner-slider-next w-8 h-8 flex items-center justify-center text-heading bg-light shadow-300 outline-none rounded-full absolute top-1/2 -mt-4 z-10 cursor-pointer -end-4 focus:outline-none">
+              <span className="sr-only">{t("text-next")}</span>
               <ArrowNextIcon />
             </button>
           </div>
         </div>
       ) : (
         <div className="min-h-full pt-6 pb-8 px-4 lg:p-8">
-          <NotFound text="Sorry, No Category Found :(" className="h-96" />
+          <NotFound text="text-no-category" className="h-96" />
         </div>
       )}
     </div>

@@ -12,6 +12,7 @@ import ValidationError from "@components/ui/validation-error";
 import { ROUTES } from "@utils/routes";
 import { useCreateOrderMutation } from "@data/order/use-create-order.mutation";
 import { useOrderStatusesQuery } from "@data/order/use-order-statuses.query";
+import { useTranslation } from "next-i18next";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { useCart } from "@contexts/quick-cart/cart.context";
@@ -31,20 +32,23 @@ interface FormValues {
 }
 
 const paymentSchema = Yup.object().shape({
-  contact: Yup.string().min(8).required(),
+  contact: Yup.string()
+    .min(8, "error-min-contact")
+    .required("error-contact-required"),
   payment_gateway: Yup.string().default("stripe").oneOf(["cod", "stripe"]),
   card: Yup.mixed().when("payment_gateway", {
     is: (value: string) => value === "stripe",
     then: Yup.object().shape({
-      number: Yup.string().required(),
-      expiry: Yup.string().required(),
-      cvc: Yup.string().required(),
-      email: Yup.string().email().required(),
+      number: Yup.string().required("error-card-required"),
+      expiry: Yup.string().required("error-expiry-date"),
+      cvc: Yup.string().required("error-cvc"),
+      email: Yup.string().email().required("error-email-required"),
     }),
   }),
 });
 
 const PaymentForm = () => {
+  const { t } = useTranslation("common");
   const router = useRouter();
   const { mutate: createOrder, isLoading: loading } = useCreateOrderMutation();
   const { data: orderStatusData } = useOrderStatusesQuery();
@@ -120,7 +124,10 @@ const PaymentForm = () => {
 
     createOrder(input, {
       onSuccess: (order: any) => {
-        router.push(`${ROUTES.ORDER_RECEIVED}/${order?.id}`);
+        router.push(`${ROUTES.ORDERS}/${order?.tracking_number}`);
+      },
+      onError: (error: any) => {
+        console.log(error.message);
       },
     });
   }
@@ -132,24 +139,24 @@ const PaymentForm = () => {
       className="flex flex-col"
     >
       <Input
-        {...register("contact", { required: "Contact Number is required" })}
-        label="Enter Your Contact Number"
+        {...register("contact", { required: "error-contact-required" })}
+        label={t("text-enter-contact-number")}
         variant="outline"
         className="flex-1"
         onChange={(e) => setValue("contact", maskPhoneNumber(e.target.value))}
-        error={errors?.contact?.message}
+        error={t(errors?.contact?.message!)}
       />
 
       <div className="my-6">
-        <Label>Payment Gateway</Label>
+        <Label>{t("text-payment-gateway")}</Label>
 
-        <div className="space-x-4 flex items-center">
+        <div className="space-s-4 flex items-center">
           <Radio
             id="stripe"
             type="radio"
             {...register("payment_gateway")}
             value="stripe"
-            label="Stripe"
+            label={t("text-stripe")}
             className=""
           />
 
@@ -158,7 +165,7 @@ const PaymentForm = () => {
             type="radio"
             {...register("payment_gateway")}
             value="cod"
-            label="Cash On Delivery"
+            label={t("text-cash-on-delivery")}
             className=""
           />
         </div>
@@ -166,61 +173,59 @@ const PaymentForm = () => {
 
       {isCashOnDelivery === "stripe" && (
         <div>
-          <Label>Card Information</Label>
+          <Label>{t("text-card-info")}</Label>
 
           <Input
             {...register("card.email")}
             className=""
             variant="outline"
-            placeholder="Email"
-            error={errors?.card?.email?.message}
+            placeholder={t("text-email")}
+            error={t(errors.card?.email?.message!)}
           />
 
           <FormattedInput
             variant="outline"
             className=""
-            placeholder="Card Number(ex: 4242424242424242)"
+            placeholder={t("placeholder-card-number")}
             {...register("card.number")}
             options={{
               creditCard: true,
             }}
-            error={errors?.card?.number?.message}
+            error={t(errors.card?.number?.message!)}
           />
 
-          <div className="flex space-x-4 w-full">
+          <div className="flex space-s-4 w-full">
             <FormattedInput
               variant="outline"
               className="w-1/2"
-              placeholder="M/Y"
+              placeholder={t("placeholder-m-y")}
               options={{ date: true, datePattern: ["m", "y"] }}
               {...register("card.expiry")}
-              error={errors?.card?.expiry?.message}
+              error={t(errors.card?.expiry?.message!)}
             />
             <FormattedInput
               variant="outline"
               className="w-1/2"
-              placeholder="CVC"
+              placeholder={t("placeholder-cvc")}
               options={{ blocks: [4] }}
               {...register("card.cvc")}
-              error={errors?.card?.cvc?.message}
+              error={t(errors.card?.cvc?.message!)}
             />
           </div>
         </div>
       )}
-      {!subtotal && (
-        <ValidationError message="Your ordered items are unavailable" />
-      )}
+      {!subtotal && <ValidationError message={t("error-order-unavailable")} />}
       {total < 0 && (
         <div className="mt-3">
-          <ValidationError message="Sorry, we can't process your order :(" />
+          <ValidationError message={t("error-cant-process-order")} />
         </div>
       )}
       <Button
         loading={loading}
         disabled={!subtotal || total < 0}
-        className="w-full lg:w-auto lg:ml-auto mt-5"
+        className="w-full lg:w-auto lg:ms-auto mt-5"
       >
-        Place Order
+        {t("text-place-order")}
       </Button>
     </form>
   );

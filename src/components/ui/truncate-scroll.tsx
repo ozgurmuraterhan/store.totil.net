@@ -19,12 +19,12 @@ const Truncate: React.FC<ReadMoreProps> = ({
     <>
       {children && children.length < character
         ? children
-        : children.substring(0, character)}
+        : children.substring(0, character) + "..."}
       {!hideButton && children.length > character && (
         <>
           ...
           <button
-            className="ml-1 text-sm font-semibold text-primary hover:text-primary-2 outline-none focus:outline-none"
+            className="ms-1 text-sm font-semibold text-accent hover:text-accent-hover outline-none focus:outline-none"
             onClick={onClick}
           >
             {buttonText}

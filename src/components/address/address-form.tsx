@@ -3,11 +3,15 @@ import Input from "@components/ui/input";
 import Label from "@components/ui/label";
 import Radio from "@components/ui/radio/radio";
 import TextArea from "@components/ui/text-area";
-import { useUI } from "@contexts/ui.context";
 import { useUpdateCustomerMutation } from "@data/customer/use-update-customer.mutation";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "next-i18next";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import {
+  useModalAction,
+  useModalState,
+} from "@components/ui/modal/modal.context";
 
 type FormValues = {
   title: string;
@@ -22,22 +26,23 @@ type FormValues = {
 };
 
 const addressSchema = yup.object().shape({
-  type: yup.string().required("Type is required"),
-  title: yup.string().required("Title is required"),
+  type: yup.string().required("error-type-required"),
+  title: yup.string().required("error-title-required"),
   address: yup.object().shape({
-    country: yup.string().required("Country is required"),
-    city: yup.string().required("City is required"),
-    state: yup.string().required("State is required"),
-    zip: yup.string().required("Zip is required"),
-    street_address: yup.string().required("Street Address is required"),
+    country: yup.string().required("error-country-required"),
+    city: yup.string().required("error-city-required"),
+    state: yup.string().required("error-state-required"),
+    zip: yup.string().required("error-zip-required"),
+    street_address: yup.string().required("error-street-required"),
   }),
 });
 
 const CreateOrUpdateAddressForm = () => {
+  const { t } = useTranslation();
   const {
-    modalData: { customerId, address, type },
-    closeModal,
-  } = useUI();
+    data: { customerId, address, type },
+  } = useModalState();
+  const { closeModal } = useModalAction();
   const { mutate: updateProfile } = useUpdateCustomerMutation();
   const {
     register,
@@ -71,9 +76,9 @@ const CreateOrUpdateAddressForm = () => {
     return closeModal();
   }
   return (
-    <div className="p-5 sm:p-8 bg-white">
+    <div className="p-5 sm:p-8 bg-light">
       <h1 className="text-heading font-semibold text-lg text-center mb-4 sm:mb-6">
-        {address ? "Update" : "Add New"} Address
+        {address ? t("text-update") : t("text-add-new")} {t("text-address")}
       </h1>
       <form
         onSubmit={handleSubmit(onSubmit)}
@@ -81,72 +86,73 @@ const CreateOrUpdateAddressForm = () => {
         className="grid grid-cols-2 gap-5 h-full"
       >
         <div>
-          <Label>Type</Label>
+          <Label>{t("text-type")}</Label>
 
-          <div className="space-x-4 flex items-center">
+          <div className="space-s-4 flex items-center">
             <Radio
               id="billing"
-              {...register("type", { required: "Type is required" })}
+              {...register("type")}
               type="radio"
               value="billing"
-              label="Billing"
+              label={t("text-billing")}
             />
 
             <Radio
               id="shipping"
-              {...register("type", { required: "Type is required" })}
+              {...register("type")}
               type="radio"
               value="shipping"
-              label="Shipping"
+              label={t("text-shipping")}
             />
           </div>
         </div>
 
         <Input
-          label="Title"
-          {...register("title", { required: "Title is required" })}
-          error={errors.title?.message}
+          label={t("text-title")}
+          {...register("title")}
+          error={t(errors.title?.message!)}
           variant="outline"
           className="col-span-2"
         />
+
         <Input
-          label="Country"
+          label={t("text-country")}
           {...register("address.country")}
-          error={errors?.address?.country?.message}
+          error={t(errors.address?.country?.message!)}
           variant="outline"
         />
 
         <Input
-          label="City"
+          label={t("text-city")}
           {...register("address.city")}
-          error={errors?.address?.city?.message}
+          error={t(errors.address?.city?.message!)}
           variant="outline"
         />
 
         <Input
-          label="State"
+          label={t("text-state")}
           {...register("address.state")}
-          error={errors?.address?.state?.message}
+          error={t(errors.address?.state?.message!)}
           variant="outline"
         />
 
         <Input
-          label="ZIP"
+          label={t("text-zip")}
           {...register("address.zip")}
-          error={errors.address?.zip?.message}
+          error={t(errors.address?.zip?.message!)}
           variant="outline"
         />
 
         <TextArea
-          label="Street Address"
+          label={t("text-street-address")}
           {...register("address.street_address")}
-          error={errors?.address?.street_address?.message}
+          error={t(errors.address?.street_address?.message!)}
           variant="outline"
           className="col-span-2"
         />
 
         <Button className="w-full col-span-2">
-          {address ? "Update" : "Save"} Address
+          {address ? t("text-update") : t("text-save")} {t("text-address")}
         </Button>
       </form>
     </div>

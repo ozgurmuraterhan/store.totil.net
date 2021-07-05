@@ -27,13 +27,13 @@ const RadioCardGroup = ({ items }: Props) => {
           )}
           onClick={() => setSelected(idx)}
         >
-          <p className="text-sm text-gray-800 font-semibold mb-3">{title}</p>
-          <p className="text-sm text-gray-600">{description}</p>
-          <div className="absolute top-4 right-4 flex space-x-2 opacity-0 group-hover:opacity-100">
-            <span className="flex items-center justify-center w-5 h-5 rounded-full bg-green-600 text-white">
+          <p className="text-sm text-heading font-semibold mb-3">{title}</p>
+          <p className="text-sm text-body-dark">{description}</p>
+          <div className="absolute top-4 end-4 flex space-s-2 opacity-0 group-hover:opacity-100">
+            <span className="flex items-center justify-center w-5 h-5 rounded-full bg-green-600 text-light">
               <PencilIcon className="w-3 h-3" />
             </span>
-            <span className="flex items-center justify-center w-5 h-5 rounded-full bg-red-600 text-white">
+            <span className="flex items-center justify-center w-5 h-5 rounded-full bg-red-600 text-light">
               <CloseIcon className="w-3 h-3" />
             </span>
           </div>

@@ -6,6 +6,8 @@ export type ParamsType = {
   text?: string;
   category?: string;
   status?: string;
+  is_active?: string;
+  shop_id?: string;
   limit?: number;
 };
 export class CoreApi {
@@ -27,12 +29,22 @@ export class CoreApi {
       .slice(0, -1);
   }
   find(params: ParamsType) {
-    const { type, text: name, category, status, limit = 30 } = params;
+    const {
+      type,
+      text: name,
+      category,
+      status,
+      is_active,
+      shop_id,
+      limit = 30,
+    } = params;
     const searchString = this.stringifySearchQuery({
       type,
       name,
       category,
       status,
+      shop_id,
+      is_active,
     });
     const queryString = `?search=${searchString}&searchJoin=and&limit=${limit}`;
     return this.http.get(this._base_path + queryString);

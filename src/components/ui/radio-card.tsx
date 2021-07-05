@@ -6,7 +6,7 @@ type RadioCardProps = {
   id: string;
   name: string;
   title: string;
-  content: string;
+  content?: string;
   checked?: boolean;
   onChange: () => void;
   onEdit?: () => void;
@@ -61,20 +61,20 @@ const RadioCard: React.FC<RadioCardProps> = ({
         className="opacity-0 invisible absolute"
       />
       {title && (
-        <span className="text-sm text-gray-800 font-semibold">{title}</span>
+        <span className="text-sm text-heading font-semibold">{title}</span>
       )}
       {content && (
-        <span className="text-sm text-gray-600" style={{ lineHeight: 1.8 }}>
+        <span className="text-sm text-body-dark" style={{ lineHeight: 1.8 }}>
           {content}
         </span>
       )}
       {onEdit || onDelete ? (
-        <span className="grid grid-flow-col auto-cols-max gap-x-1.5 absolute top-2.5 right-2.5 transition duration-200 opacity-0 group-hover:opacity-100">
+        <span className="grid grid-flow-col auto-cols-max gap-x-1.5 absolute top-2.5 end-2.5 transition duration-200 opacity-0 group-hover:opacity-100">
           {onEdit && (
             <span
               title="Edit"
               onClick={onEdit}
-              className="flex items-center justify-center w-5 h-5 rounded-full bg-green-600 text-white"
+              className="flex items-center justify-center w-5 h-5 rounded-full bg-green-600 text-light"
             >
               <Pencil width={8.003} height={8} />
             </span>
@@ -83,7 +83,7 @@ const RadioCard: React.FC<RadioCardProps> = ({
             <span
               title="Delete"
               onClick={onDelete}
-              className="flex items-center justify-center w-5 h-5 rounded-full bg-red-600 text-white"
+              className="flex items-center justify-center w-5 h-5 rounded-full bg-red-600 text-light"
             >
               <CloseIcon width={8.003} height={8} />
             </span>

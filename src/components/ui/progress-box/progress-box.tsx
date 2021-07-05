@@ -39,9 +39,9 @@ const ProgressBox: React.FC<ProgressProps> = ({ status, data }) => {
               <div className={styles.bar} />
             </div>
 
-            <div className="flex flex-col items-start ml-5 md:items-center md:ml-0">
+            <div className="flex flex-col items-start ms-5 md:items-center md:ms-0">
               {item && (
-                <span className="text-base text-gray-600 capitalize font-semibold text-left md:text-center md:px-2">
+                <span className="text-base text-body-dark capitalize font-semibold text-start md:text-center md:px-2">
                   {item?.name}
                 </span>
               )}

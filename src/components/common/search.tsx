@@ -1,13 +1,14 @@
 import SearchBox from "@components/ui/search-box";
 import { useSearch } from "@contexts/search.context";
 import { useRouter } from "next/router";
-
+import { useTranslation } from "next-i18next";
 interface Props {
   label: string;
   [key: string]: unknown;
 }
 
 const Search: React.FC<Props> = ({ label, ...props }) => {
+  const { t } = useTranslation();
   const router = useRouter();
   const { searchTerm, updateSearchTerm } = useSearch();
   const handleOnChange = (e: any) => {
@@ -64,7 +65,7 @@ const Search: React.FC<Props> = ({ label, ...props }) => {
       onChange={handleOnChange}
       value={searchTerm}
       name="search"
-      placeholder="Search your products from here"
+      placeholder={t("common:text-search-placeholder")}
       {...props}
     />
   );

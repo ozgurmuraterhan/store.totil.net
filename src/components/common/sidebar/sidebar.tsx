@@ -63,18 +63,18 @@ const Sidebar: FC<SidebarProps> = ({
                 variants={fadeInOut(0.35)}
                 onClick={onClose}
                 className={cn(
-                  "absolute inset-0 bg-black bg-opacity-40",
+                  "absolute inset-0 bg-dark bg-opacity-40",
                   useBlurBackdrop && "use-blur-backdrop"
                 )}
               />
               <div
                 className={cn(
                   "absolute inset-y-0 max-w-full flex outline-none",
-                  variant === "right" ? "right-0" : "left-0"
+                  variant === "right" ? "end-0" : "start-0"
                 )}
               >
                 <div className="h-full w-screen max-w-md">
-                  <div className="h-full flex flex-col text-base bg-white shadow-xl">
+                  <div className="h-full flex flex-col text-body bg-light shadow-xl">
                     <Scrollbar className="w-full h-full">{children}</Scrollbar>
                   </div>
                 </div>

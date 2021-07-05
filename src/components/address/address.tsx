@@ -1,6 +1,6 @@
 import SectionWithCardGroup from "@components/common/section-with-card-group";
+import { useModalAction } from "@components/ui/modal/modal.context";
 import { useCheckout } from "@contexts/checkout.context";
-import { useUI } from "@contexts/ui.context";
 import { loggedIn } from "@utils/is-loggedin";
 import { useEffect } from "react";
 
@@ -13,7 +13,7 @@ interface Props {
 }
 
 const Address = ({ id, addresses, heading, count, type }: Props) => {
-  const { openModal, setModalView, setModalData } = useUI();
+  const { openModal } = useModalAction();
   const { updateBillingAddress, updateShippingAddress } = useCheckout();
   useEffect(() => {
     if (addresses && type === "billing") {
@@ -25,23 +25,19 @@ const Address = ({ id, addresses, heading, count, type }: Props) => {
   }, [addresses]);
   function handleAdd() {
     if (loggedIn()) {
-      setModalData({ customerId: id, type });
-      setModalView("ADD_OR_UPDATE_ADDRESS");
-      return openModal();
+      return openModal("ADD_OR_UPDATE_ADDRESS", { customerId: id, type });
     } else {
-      setModalView("LOGIN_VIEW");
-      openModal();
+      openModal("LOGIN_VIEW");
     }
   }
   function handleEdit(address: any) {
-    setModalData({ customerId: id, address });
-    setModalView("ADD_OR_UPDATE_ADDRESS");
-    return openModal();
+    return openModal("ADD_OR_UPDATE_ADDRESS", { customerId: id, address });
   }
   function handleDelete(address: any) {
-    setModalData({ customerId: id, addressId: address.id });
-    setModalView("DELETE_ADDRESS");
-    return openModal();
+    return openModal("DELETE_ADDRESS", {
+      customerId: id,
+      addressId: address.id,
+    });
   }
   function handleSelect(item: any) {
     if (type === "billing") {
@@ -54,7 +50,7 @@ const Address = ({ id, addresses, heading, count, type }: Props) => {
     <SectionWithCardGroup
       count={count}
       heading={heading}
-      addActionText="Address"
+      addActionText="text-address"
       items={addresses}
       onSelect={handleSelect}
       onAdd={handleAdd}

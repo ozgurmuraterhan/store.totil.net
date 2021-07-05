@@ -1,13 +1,17 @@
 import ConfirmationCard from "@components/common/confirmation-card";
-import { useUI } from "@contexts/ui.context";
+import {
+  useModalAction,
+  useModalState,
+} from "@components/ui/modal/modal.context";
 import { useDeleteAddressMutation } from "@data/customer/use-address.mutation";
 
 const AddressDeleteView = () => {
-  const { closeModal, modalData } = useUI();
+  const { data } = useModalState();
+  const { closeModal } = useModalAction();
   const { mutate: deleteAddressById, isLoading } = useDeleteAddressMutation();
 
   function handleDelete() {
-    deleteAddressById({ id: modalData.addressId });
+    deleteAddressById({ id: data?.addressId });
     return closeModal();
   }
   return (

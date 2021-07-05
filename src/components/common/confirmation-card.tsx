@@ -1,11 +1,16 @@
 import TrashIcon from "@components/icons/trash";
 import Button from "@components/ui/button";
+import { useTranslation } from "next-i18next";
+import cn from "classnames";
 
 type ConfirmationCardProps = {
   onCancel: () => void;
   onDelete: () => void;
   title?: string;
+  icon?: any;
   description?: string;
+  cancelBtnClassName?: string;
+  deleteBtnClassName?: string;
   cancelBtnText?: string;
   deleteBtnText?: string;
   cancelBtnLoading?: boolean;
@@ -15,32 +20,43 @@ type ConfirmationCardProps = {
 const ConfirmationCard: React.FC<ConfirmationCardProps> = ({
   onCancel,
   onDelete,
-  title = "Delete Item",
-  description = "Are you sure you want to delete this item?",
-  cancelBtnText = "Cancel",
-  deleteBtnText = "Delete",
+  icon,
+  title = "button-delete",
+  description = "delete-item-confirm",
+  cancelBtnText = "button-cancel",
+  deleteBtnText = "button-delete",
+  cancelBtnClassName,
+  deleteBtnClassName,
   cancelBtnLoading,
   deleteBtnLoading,
 }) => {
+  const { t } = useTranslation("common");
   return (
-    <div className="p-4 pb-6 bg-white m-auto">
+    <div className="p-4 pb-6 bg-light m-auto">
       <div className="w-full h-full text-center">
         <div className="flex h-full flex-col justify-between">
-          <TrashIcon className="mt-4 w-12 h-12 m-auto text-primary" />
-          <p className="text-gray-800 text-xl font-bold mt-4">{title}</p>
-          <p className="text-gray-600 dark:text-gray-400 leading-relaxed py-2 px-6">
-            {description}
+          {icon ? (
+            icon
+          ) : (
+            <TrashIcon className="mt-4 w-12 h-12 m-auto text-accent" />
+          )}
+          <p className="text-heading text-xl font-bold mt-4">{t(title)}</p>
+          <p className="text-body-dark dark:text-muted leading-relaxed py-2 px-6">
+            {t(description)}
           </p>
-          <div className="flex items-center justify-between space-x-4 w-full mt-8">
+          <div className="flex items-center justify-between space-s-4 w-full mt-8">
             <div className="w-1/2">
               <Button
                 onClick={onCancel}
                 loading={cancelBtnLoading}
                 disabled={cancelBtnLoading}
                 variant="custom"
-                className="w-full py-2 px-4 bg-primary focus:outline-none hover:bg-primary-2 focus:bg-primary-2 text-white transition ease-in duration-200 text-center text-base font-semibold rounded shadow-md"
+                className={cn(
+                  "w-full py-2 px-4 bg-accent focus:outline-none hover:bg-accent-hover focus:bg-accent-hover text-light transition ease-in duration-200 text-center text-base font-semibold rounded shadow-md",
+                  cancelBtnClassName
+                )}
               >
-                {cancelBtnText}
+                {t(cancelBtnText)}
               </Button>
             </div>
 
@@ -50,9 +66,12 @@ const ConfirmationCard: React.FC<ConfirmationCardProps> = ({
                 loading={deleteBtnLoading}
                 disabled={deleteBtnLoading}
                 variant="custom"
-                className="w-full py-2 px-4 bg-red-600 focus:outline-none hover:bg-red-700 focus:bg-red-700 text-white transition ease-in duration-200 text-center text-base font-semibold rounded shadow-md"
+                className={cn(
+                  "w-full py-2 px-4 bg-red-600 focus:outline-none hover:bg-red-700 focus:bg-red-700 text-light transition ease-in duration-200 text-center text-base font-semibold rounded shadow-md",
+                  deleteBtnClassName
+                )}
               >
-                {deleteBtnText}
+                {t(deleteBtnText)}
               </Button>
             </div>
           </div>

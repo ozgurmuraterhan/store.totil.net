@@ -13,7 +13,7 @@ export const siteSettings = {
     width: 128,
     height: 40,
   },
-  defaultLanguage: "en",
+  defaultLanguage: "ar",
   currencyCode: "USD",
   product: {
     placeholderImage: "/product-placeholder.svg",
@@ -56,36 +56,37 @@ export const siteSettings = {
     ],
   },
   headerLinks: [
-    { href: ROUTES.OFFERS, label: "Offers", icon: null },
-    { href: ROUTES.HELP, label: "FAQ" },
-    { href: ROUTES.CONTACT, label: "Contact" },
+    { href: ROUTES.SHOPS, icon: null, label: "nav-menu-shops" },
+    { href: ROUTES.OFFERS, icon: null, label: "nav-menu-offer" },
+    { href: ROUTES.HELP, label: "nav-menu-faq" },
+    { href: ROUTES.CONTACT, label: "nav-menu-contact" },
   ],
   authorizedLinks: [
-    { href: ROUTES.PROFILE, label: "Profile" },
-    { href: ROUTES.CHECKOUT, label: "Checkout" },
-    { href: ROUTES.ORDERS, label: "My Orders" },
-    { href: ROUTES.LOGOUT, label: "Logout" },
+    { href: ROUTES.PROFILE, label: "auth-menu-profile" },
+    { href: ROUTES.CHECKOUT, label: "auth-menu-checkout" },
+    { href: ROUTES.ORDERS, label: "auth-menu-my-orders" },
+    { href: ROUTES.LOGOUT, label: "auth-menu-logout" },
   ],
   dashboardSidebarMenu: [
     {
       href: ROUTES.PROFILE,
-      label: "Profile",
+      menulabel: "profile-sidebar-profile",
     },
     {
       href: ROUTES.CHANGE_PASSWORD,
-      label: "Change Password",
+      menulabel: "profile-sidebar-password",
     },
     {
       href: ROUTES.ORDERS,
-      label: "My Orders",
+      menulabel: "profile-sidebar-orders",
     },
     {
       href: ROUTES.HELP,
-      label: "Need Help",
+      menulabel: "profile-sidebar-help",
     },
     {
       href: ROUTES.LOGOUT,
-      label: "Logout",
+      menulabel: "profile-sidebar-logout",
     },
   ],
   deliverySchedule: [

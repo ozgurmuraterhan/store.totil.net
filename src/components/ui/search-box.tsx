@@ -2,6 +2,7 @@ import { InputHTMLAttributes } from "react";
 import cn from "classnames";
 import { SearchIcon } from "@components/icons/search-icon";
 import { CloseIcon } from "@components/icons/close-icon";
+import { useTranslation } from "next-i18next";
 
 export interface Props extends InputHTMLAttributes<HTMLInputElement> {
   className?: string;
@@ -13,9 +14,9 @@ export interface Props extends InputHTMLAttributes<HTMLInputElement> {
 
 const classes = {
   normal:
-    "bg-white pl-6 pr-14 rounded-tr-none rounded-br-none  border border-r-0 border-transparent focus:border-primary",
+    "bg-light ps-6 pe-14 rounded-te-none rounded-be-none  border border-e-0 border-transparent focus:border-accent",
   minimal:
-    "bg-gray-100 pl-10 pr-12 md:pl-14 border border-gray-200 focus:border-primary focus:bg-white",
+    "bg-gray-100 ps-10 pe-12 md:ps-14 border border-border-200 focus:border-accent focus:bg-light",
 };
 
 const SearchBox: React.FC<Props> = ({
@@ -27,6 +28,8 @@ const SearchBox: React.FC<Props> = ({
   value,
   ...rest
 }) => {
+  const { t } = useTranslation();
+
   return (
     <form onSubmit={onSubmit} className="w-full">
       <div
@@ -45,7 +48,7 @@ const SearchBox: React.FC<Props> = ({
           value={value}
           autoComplete="off"
           className={cn(
-            "w-full h-full flex item-center appearance-none transition duration-300 ease-in-out text-heading placeholder-gray-500 overflow-hidden rounded-lg focus:outline-none focus:ring-0",
+            "w-full h-full flex item-center appearance-none transition duration-300 ease-in-out text-heading text-sm placeholder-gray-500 overflow-hidden rounded-lg focus:outline-none focus:ring-0",
             classes[variant]
           )}
           {...rest}
@@ -55,26 +58,26 @@ const SearchBox: React.FC<Props> = ({
             type="button"
             onClick={onClearSearch}
             className={cn(
-              "cursor-pointer h-full w-10 md:w-14 flex items-center justify-center absolute text-body transition-colors duration-200 focus:outline-none hover:text-primary-2 focus:text-primary-2",
+              "cursor-pointer h-full w-10 md:w-14 flex items-center justify-center absolute text-body transition-colors duration-200 focus:outline-none hover:text-accent-hover focus:text-accent-hover",
               {
-                "right-36": variant === "normal",
-                "right-0": variant !== "normal",
+                "end-36": variant === "normal",
+                "end-0": variant !== "normal",
               }
             )}
           >
-            <span className="sr-only">close</span>
+            <span className="sr-only">{t("common:text-close")}</span>
             <CloseIcon className="w-3.5 h-3.5 md:w-3 md:h-3" />
           </button>
         )}
 
         {variant === "normal" ? (
-          <button className="h-full px-8 flex items-center rounded-lg rounded-tl-none rounded-bl-none bg-primary text-white font-semibold transition-colors duration-200 focus:outline-none hover:bg-primary-2 focus:bg-primary-2">
-            <SearchIcon className="w-4 h-4 mr-2.5" />
-            Search
+          <button className="h-full px-8 flex items-center rounded-lg rounded-ts-none rounded-bs-none bg-accent text-light font-semibold transition-colors duration-200 focus:outline-none hover:bg-accent-hover focus:bg-accent-hover">
+            <SearchIcon className="w-4 h-4 me-2.5" />
+            {t("common:text-search")}
           </button>
         ) : (
-          <button className="h-full w-10 md:w-14 flex items-center justify-center absolute left-0 text-body transition-colors duration-200 focus:outline-none hover:text-primary-2 focus:text-primary-2">
-            <span className="sr-only">Search</span>
+          <button className="h-full w-10 md:w-14 flex items-center justify-center absolute start-0 text-body transition-colors duration-200 focus:outline-none hover:text-accent-hover focus:text-accent-hover">
+            <span className="sr-only">{t("common:text-search")}</span>
             <SearchIcon className="w-3.5 h-3.5 md:w-4 md:h-4" />
           </button>
         )}

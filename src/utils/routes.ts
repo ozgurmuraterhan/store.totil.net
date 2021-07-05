@@ -13,4 +13,5 @@ export const ROUTES = {
   PRIVACY: "/privacy",
   TERMS: "/terms",
   CONTACT: "/contact",
+  SHOPS: "/shops",
 };

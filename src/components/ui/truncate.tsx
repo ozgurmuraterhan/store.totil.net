@@ -1,18 +1,20 @@
 import { useState } from "react";
+import { useTranslation } from "next-i18next";
 
 type ReadMoreProps = {
   more?: string;
   less?: string;
   character: number;
-  children: any;
+  children: string;
 };
 
 const ReadMore: React.FC<ReadMoreProps> = ({
   children,
   more,
   less,
-  character,
+  character = 150,
 }) => {
+  const { t } = useTranslation();
   const [expanded, setExpanded] = useState(false);
 
   const toggleLines = (event: any) => {
@@ -26,17 +28,17 @@ const ReadMore: React.FC<ReadMoreProps> = ({
     <>
       {(children && children.length < character) || expanded
         ? children
-        : children.substring(0, character)}
+        : children.substring(0, character) + "..."}
       {children && children.length > character && !expanded && (
         <>
           <br />
-          <span>
+          <span className="mt-1 inline-block">
             <a
               href="#"
               onClick={toggleLines}
               style={{ color: "#009e7f", fontWeight: 700 }}
             >
-              {more}
+              {more ? more : t("common:text-read-more")}
             </a>
           </span>
         </>
@@ -44,25 +46,19 @@ const ReadMore: React.FC<ReadMoreProps> = ({
       {children && children.length > character && expanded && (
         <>
           <br />
-          <span>
+          <span className="mt-1 inline-block">
             <a
               href="#"
               onClick={toggleLines}
               style={{ color: "#009e7f", fontWeight: 700 }}
             >
-              {less}
+              {less ? less : t("common:text-less")}
             </a>
           </span>
         </>
       )}
     </>
   );
-};
-
-ReadMore.defaultProps = {
-  character: 150,
-  more: "Read more",
-  less: "less",
 };
 
 export default ReadMore;

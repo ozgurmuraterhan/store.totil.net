@@ -8,10 +8,12 @@ import CartItem from "@components/cart/cart-item";
 import { fadeInOut } from "@utils/motion/fade-in-out";
 import { ROUTES } from "@utils/routes";
 import usePrice from "@utils/use-price";
+import { useTranslation } from "next-i18next";
 import { useCart } from "@contexts/quick-cart/cart.context";
 import { formatString } from "@utils/format-string";
 
 const CartSidebarView = () => {
+  const { t } = useTranslation("common");
   const { items, totalUniqueItems, total } = useCart();
   const { closeSidebar } = useUI();
   const router = useRouter();
@@ -25,18 +27,18 @@ const CartSidebarView = () => {
   });
   return (
     <section className="flex flex-col h-full relative">
-      <header className="fixed max-w-md w-full top-0 z-10 bg-white py-4 px-6 flex items-center justify-between border-b border-gray-200 border-opacity-75">
-        <div className="flex text-primary font-semibold">
+      <header className="fixed max-w-md w-full top-0 z-10 bg-light py-4 px-6 flex items-center justify-between border-b border-border-200 border-opacity-75">
+        <div className="flex text-accent font-semibold">
           <CartCheckBagIcon className="flex-shrink-0" width={24} height={22} />
-          <span className="flex ml-2">
-            {formatString(totalUniqueItems, "Item")}
+          <span className="flex ms-2">
+            {formatString(totalUniqueItems, t("text-item"))}
           </span>
         </div>
         <button
           onClick={() => closeSidebar()}
-          className="w-7 h-7 ml-3 -mr-2 flex items-center justify-center rounded-full text-gray-400 bg-gray-100 transition-all duration-200 focus:outline-none hover:bg-primary focus:bg-primary hover:text-white focus:text-white"
+          className="w-7 h-7 ms-3 -me-2 flex items-center justify-center rounded-full text-muted bg-gray-100 transition-all duration-200 focus:outline-none hover:bg-accent focus:bg-accent hover:text-light focus:text-light"
         >
-          <span className="sr-only">close</span>
+          <span className="sr-only">{t("text-close")}</span>
           <CloseIcon className="w-3 h-3" />
         </button>
       </header>
@@ -56,8 +58,8 @@ const CartSidebarView = () => {
               className="h-full flex flex-col items-center justify-center"
             >
               <EmptyCartIcon width={140} height={176} />
-              <h4 className="mt-6 text-gray-500 font-semibold">
-                No products found
+              <h4 className="mt-6 text-base font-semibold">
+                {t("text-no-products")}
               </h4>
             </motion.div>
           )}
@@ -65,15 +67,15 @@ const CartSidebarView = () => {
       </AnimateSharedLayout>
       {/* End of cart items */}
 
-      <footer className="sticky left-0 bottom-0 w-full py-5 px-6 z-10 bg-white">
+      <footer className="sticky start-0 bottom-0 w-full py-5 px-6 z-10 bg-light">
         <button
-          className="flex justify-between w-full h-12 md:h-14 p-1 text-sm font-bold bg-primary rounded-full shadow-700 transition-colors focus:outline-none hover:bg-primary-2 focus:bg-primary-2"
+          className="flex justify-between w-full h-12 md:h-14 p-1 text-sm font-bold bg-accent rounded-full shadow-700 transition-colors focus:outline-none hover:bg-accent-hover focus:bg-accent-hover"
           onClick={() => handleCheckout()}
         >
-          <span className="flex flex-1 items-center h-full px-5 text-white">
-            Checkout
+          <span className="flex flex-1 items-center h-full px-5 text-light">
+            {t("text-checkout")}
           </span>
-          <span className="flex items-center flex-shrink-0 h-full bg-white text-primary rounded-full px-5">
+          <span className="flex items-center flex-shrink-0 h-full bg-light text-accent rounded-full px-5">
             {totalPrice}
           </span>
         </button>

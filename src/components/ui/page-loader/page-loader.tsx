@@ -1,7 +1,9 @@
 import cn from "classnames";
 import styles from "./page-loader.module.css";
+import { useTranslation } from "next-i18next";
 
-const PageLoader = () => {
+const PageLoader = ({ text = "text-loading" }) => {
+  const { t } = useTranslation("common");
   return (
     <div
       className={cn(
@@ -11,7 +13,7 @@ const PageLoader = () => {
       <div className="flex relative">
         <div className={styles.page_loader}></div>
         <h3 className="text-sm font-semibold text-body italic absolute top-1/2 -mt-2 w-full text-center">
-          Loading...
+          {t(text)}
         </h3>
       </div>
     </div>

@@ -26,25 +26,23 @@ function SidebarMenuItem({ className, item, depth = 0 }: any) {
   }
 
   function onClick() {
-    if (Array.isArray(items) && !!items.length) {
-      toggleCollapse();
-    } else {
-      // router.push(href);
-      const { pathname, query } = router;
-      const { type, ...rest } = query;
+    const { pathname, query } = router;
+    const navigate = () =>
       router.push(
         {
           pathname,
-          query: { ...rest, category: slug },
+          query: { ...query, category: slug },
         },
-        {
-          pathname: `/${type}`,
-          query: { ...rest, category: slug },
-        },
+        undefined,
         {
           scroll: false,
         }
       );
+    if (Array.isArray(items) && !!items.length) {
+      toggleCollapse();
+      navigate();
+    } else {
+      navigate();
       displaySidebar && closeSidebar();
     }
   }
@@ -68,13 +66,13 @@ function SidebarMenuItem({ className, item, depth = 0 }: any) {
       >
         <button
           className={cn(
-            "flex items-center w-full py-2 text-left outline-none text-gray-600 font-semibold  focus:outline-none focus:ring-0 focus:text-primary",
-            isOpen ? "text-primary" : "text-gray-600",
+            "flex items-center w-full py-2 text-start outline-none text-body-dark font-semibold  focus:outline-none focus:ring-0 focus:text-accent",
+            isOpen ? "text-accent" : "text-body-dark",
             className ? className : "text-sm"
           )}
         >
           {icon && (
-            <span className="flex w-5 h-5 mr-4 items-center justify-center">
+            <span className="flex w-5 h-5 me-4 items-center justify-center">
               {getIcon({
                 iconList: CategoryIcons,
                 iconName: icon,
@@ -83,7 +81,7 @@ function SidebarMenuItem({ className, item, depth = 0 }: any) {
             </span>
           )}
           <span>{name}</span>
-          <span className="ml-auto">{expandIcon}</span>
+          <span className="ms-auto">{expandIcon}</span>
         </button>
       </motion.li>
       <AnimatePresence initial={false}>
@@ -99,7 +97,7 @@ function SidebarMenuItem({ className, item, depth = 0 }: any) {
                 collapsed: { opacity: 0, height: 0 },
               }}
               transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}
-              className="ml-4 text-xs"
+              className="ms-4 text-xs"
             >
               {items?.map((currentItem) => {
                 const childDepth = depth + 1;
@@ -108,7 +106,7 @@ function SidebarMenuItem({ className, item, depth = 0 }: any) {
                     key={`${currentItem.name}${currentItem.slug}`}
                     item={currentItem}
                     depth={childDepth}
-                    className={cn("text-sm text-gray-500 ml-5")}
+                    className={cn("text-sm text-body ms-5")}
                   />
                 );
               })}

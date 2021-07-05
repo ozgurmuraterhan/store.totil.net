@@ -7,6 +7,7 @@ import { maskPhoneNumber } from "@utils/mask-phone-number";
 import { useForm } from "react-hook-form";
 import TextArea from "@components/ui/text-area";
 import { toast } from "react-toastify";
+import { useTranslation } from "next-i18next";
 import { User } from "@ts-types/generated";
 import pick from "lodash/pick";
 
@@ -20,6 +21,7 @@ type UserFormValues = {
 };
 
 const ProfileForm = ({ user }: Props) => {
+  const { t } = useTranslation("common");
   const { register, handleSubmit, setValue, control } = useForm<UserFormValues>(
     {
       defaultValues: {
@@ -33,10 +35,8 @@ const ProfileForm = ({ user }: Props) => {
       },
     }
   );
-  const {
-    mutate: updateProfile,
-    isLoading: loading,
-  } = useUpdateCustomerMutation();
+  const { mutate: updateProfile, isLoading: loading } =
+    useUpdateCustomerMutation();
   function onSubmit(values: any) {
     updateProfile(
       {
@@ -50,29 +50,29 @@ const ProfileForm = ({ user }: Props) => {
       },
       {
         onSuccess: () => {
-          toast.success("Successfully updated!");
+          toast.success(t("profile-update-successful"));
         },
       }
     );
   }
   return (
     <form noValidate onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex space-x-4 mb-8">
+      <div className="flex mb-8">
         <Card className="w-full">
           <div className="mb-8">
             <FileInput control={control} name="profile.avatar" />
           </div>
 
-          <div className="flex space-x-4 mb-6">
+          <div className="flex flex-col sm:flex-row sm:space-s-4 mb-6">
             <Input
               className="flex-1"
-              label="Name"
+              label={t("text-name")}
               {...register("name")}
               variant="outline"
             />
             <Input
               {...register("profile.contact")}
-              label="Contact Number"
+              label={t("text-contact-number")}
               className="flex-1"
               onChange={(e) => {
                 const value = maskPhoneNumber(e.target.value);
@@ -84,7 +84,7 @@ const ProfileForm = ({ user }: Props) => {
           </div>
 
           <TextArea
-            label="Bio"
+            label={t("text-bio")}
             //@ts-ignore
             {...register("profile.bio")}
             variant="outline"
@@ -92,8 +92,8 @@ const ProfileForm = ({ user }: Props) => {
           />
 
           <div className="flex">
-            <Button className="ml-auto" loading={loading} disabled={loading}>
-              Save
+            <Button className="ms-auto" loading={loading} disabled={loading}>
+              {t("text-save")}
             </Button>
           </div>
         </Card>

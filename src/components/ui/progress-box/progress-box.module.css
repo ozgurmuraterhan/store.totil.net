@@ -7,15 +7,15 @@
 }
 
 .bar {
-  @apply absolute bg-gray-100 w-1 h-double left-1/2 -top-1/2 -ml-px md:w-full md:h-1 md:top-1/2 md:left-0 md:-mt-px;
+  @apply absolute bg-gray-100 w-1 h-double start-1/2 -top-1/2 -ms-px md:w-full md:h-1 md:top-1/2 md:start-0 md:-mt-px;
 }
 
 .progress_container:only-child .bar {
-  @apply w-1 h-full hidden md:mx-auto top-1/2 md:w-1/2 md:left-1/2 md:h-1;
+  @apply w-1 h-full hidden md:mx-auto top-1/2 md:w-1/2 md:start-1/2 md:h-1;
 }
 
 .progress_container:first-child .bar {
-  @apply w-1 h-full top-1/2 md:w-1/2 md:left-1/2 md:h-1;
+  @apply w-1 h-full top-1/2 md:w-1/2 md:start-1/2 md:h-1;
 }
 
 .progress_container:last-child .bar {
@@ -30,13 +30,13 @@
 }
 
 .progress_wrapper.checked .bar {
-  @apply bg-primary;
+  @apply bg-accent;
 }
 
 .status_wrapper {
-  @apply text-sm font-bold text-primary w-9 h-9 flex items-center justify-center rounded-full bg-white border border-dashed border-primary z-10;
+  @apply text-sm font-bold text-accent w-9 h-9 flex items-center justify-center rounded-full bg-light border border-dashed border-accent z-10;
 }
 
 .progress_wrapper.checked .status_wrapper {
-  @apply bg-primary text-white;
+  @apply bg-accent text-light;
 }

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
-import { GetStaticProps } from "next";
+import { GetStaticPathsContext, GetStaticProps } from "next";
 import { scroller, Element } from "react-scroll";
 import { QueryClient } from "react-query";
 import { dehydrate } from "react-query/hydration";
@@ -17,6 +17,7 @@ import { getKeyValue } from "@utils/get-key-value";
 import { fetchProducts } from "@data/product/use-products.query";
 import { fetchCategories } from "@data/category/use-categories.query";
 import { fetchTypes } from "@data/type/use-types.query";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 const CartCounterButton = dynamic(
   () => import("@components/cart/cart-counter-button"),
@@ -24,42 +25,43 @@ const CartCounterButton = dynamic(
 );
 
 // This function gets called at build time
-export async function getStaticPaths() {
+export async function getStaticPaths({ locales }: GetStaticPathsContext) {
   const { types } = await fetchTypes();
-  // Get the paths we want to pre-render based on types
+
   const paths = types
-    ?.filter((t) => t.slug !== "bakery")
-    .map((type) => ({
-      params: { type: type.slug },
-    }));
+    ?.filter((t: any) => t.slug !== "bakery")
+    .flatMap((type: any) =>
+      locales?.map((locale) => ({ params: { type: type.slug }, locale }))
+    );
   // We'll pre-render only these paths at build time.
   // { fallback: false } means other routes should 404.
   return { paths, fallback: false };
 }
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+export const getStaticProps: GetStaticProps = async ({ locale, params }) => {
   const queryClient = new QueryClient();
 
   await queryClient.prefetchInfiniteQuery(
     ["products", { type: params?.type }],
     fetchProducts,
     {
-      staleTime: 10 * 1000,
+      staleTime: 60 * 1000,
     }
   );
   await queryClient.prefetchQuery(
     ["categories", { type: params?.type }],
     fetchCategories,
     {
-      staleTime: 10 * 1000,
+      staleTime: 60 * 1000,
     }
   );
   await queryClient.prefetchQuery("types", fetchTypes, {
-    staleTime: 10 * 1000,
+    staleTime: 60 * 1000,
   });
 
   return {
     props: {
+      ...(await serverSideTranslations(locale!, ["common", "banner"])),
       dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))),
     },
     revalidate: 60,
@@ -88,7 +90,7 @@ export default function HomePage() {
       <FilterBar />
       <Element
         name="grid"
-        className="flex flex-1 border-t border-solid border-gray-200 border-opacity-70"
+        className="flex flex-1 border-t border-solid border-border-200 border-opacity-70"
       >
         <CategoryDropdownSidebar />
         <main className="flex-1">

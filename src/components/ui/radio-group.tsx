@@ -17,13 +17,12 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
 }) => {
   const classes = cn(
     {
-      "px-4 py-3 text-sm border rounded text-heading bg-gray-50 border-gray-200":
+      "px-4 py-3 text-sm border rounded text-heading bg-gray-50 border-border-200":
         className !== "color",
-      "!text-white !bg-primary !border-primary":
-        active && className !== "color",
+      "!text-light !bg-accent !border-accent": active && className !== "color",
       "h-11 w-11 p-0.5 flex items-center justify-center border-2 rounded-full border-transparent":
         className === "color",
-      "!border-primary": active && className === "color",
+      "!border-accent": active && className === "color",
     },
     "cursor-pointer"
   );
@@ -31,7 +30,7 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
     <div className={classes} onClick={onClick}>
       {className === "color" ? (
         <span
-          className="w-full h-full rounded-full border border-gray-200"
+          className="w-full h-full rounded-full border border-border-200"
           style={{ backgroundColor: color }}
         />
       ) : (

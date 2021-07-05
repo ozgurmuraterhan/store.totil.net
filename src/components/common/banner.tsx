@@ -4,12 +4,14 @@ import { BannerType } from "@settings/site-pages.settings";
 import Image from "next/image";
 import { Waypoint } from "react-waypoint";
 import cn from "classnames";
+import { useTranslation } from "next-i18next";
 
 type BannerProps = {
   banner: BannerType;
   className?: string;
 };
 const Banner: React.FC<BannerProps> = ({ banner, className }) => {
+  const { t } = useTranslation("banner");
   const { showHeaderSearch, hideHeaderSearch } = useUI();
   const onWaypointPositionChange = ({
     currentPosition,
@@ -30,13 +32,13 @@ const Banner: React.FC<BannerProps> = ({ banner, className }) => {
       </div>
       <div className="p-5 mt-8 absolute inset-0 w-full flex flex-col items-center justify-center text-center">
         <h1 className="text-4xl xl:text-5xl tracking-tight text-heading font-bold mb-5 xl:mb-8">
-          {banner?.heading}
+          {t(banner?.heading)}
         </h1>
         <p className="text-base xl:text-lg text-heading mb-10 xl:mb-14">
-          {banner?.subheading}
+          {t(banner?.subheading)}
         </p>
         <div className="max-w-3xl w-full">
-          <Search label="grocery search" />
+          <Search label="search" />
         </div>
         <Waypoint
           onLeave={showHeaderSearch}

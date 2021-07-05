@@ -19,26 +19,26 @@
   height: 18px;
   border-radius: 3px;
   background-color: #ffffff;
-  border: 1px solid var(--gray-300);
+  border: 1px solid rgb(var(--color-gray-300));
 }
 
 .checkbox:focus + label:before {
-  border-color: var(--primary);
+  border-color: rgb(var(--color-accent));
 }
 
 .checkbox:checked + label:before {
-  background-color: var(--primary);
-  border-color: var(--primary);
+  background-color: rgb(var(--color-accent));
+  border-color: rgb(var(--color-accent));
 }
 
 .checkbox:disabled + label {
-  color: var(--text-base);
+  color: rgb(var(--text-base));
   cursor: auto;
 }
 
 .checkbox:disabled + label:before {
   box-shadow: none;
-  background: var(--gray-300);
+  background: rgb(var(--color-gray-300));
 }
 
 .checkbox:checked + label:after {

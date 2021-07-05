@@ -6,11 +6,13 @@ import Avatar from "@components/ui/avatar";
 import { zoomInBottom } from "@utils/motion/zoom-in-bottom";
 import { useCustomerQuery } from "@data/customer/use-customer.query";
 import { useRouter } from "next/router";
+import { useTranslation } from "next-i18next";
 
 export default function AuthorizedMenu() {
   const { data } = useCustomerQuery();
   const [isOpen, setOpen] = useState(false);
   const router = useRouter();
+  const { t } = useTranslation("common");
   // helper function to close the menu
   function close() {
     setOpen(false);
@@ -20,7 +22,10 @@ export default function AuthorizedMenu() {
     onOutsideClick: close, // close the menu when the user clicks outside
     onDisappear: close, // close the menu when the menu gets scrolled out of sight
     overflowContainer: false, // keep the menu positioned inside the container
-    placement: "bottom-end", // we prefer to place the menu "bottom-end"
+    placement:
+      router.locale === "ar" || router.locale === "he"
+        ? "bottom-start"
+        : "bottom-end", // we prefer to place the menu "bottom-end"
     triggerOffset: 10, // keep some distance to the trigger
     containerOffset: 16, // give the menu some room to breath relative to the container
   });
@@ -43,7 +48,7 @@ export default function AuthorizedMenu() {
           }
           title="user name"
         />
-        <span className="sr-only">user avatar</span>
+        <span className="sr-only">{t("user-avatar")}</span>
       </button>
 
       {renderLayer(
@@ -55,15 +60,15 @@ export default function AuthorizedMenu() {
               animate="to"
               exit="from"
               variants={zoomInBottom()}
-              className="py-4 w-48 bg-white rounded shadow-700 z-20"
+              className="py-4 w-48 bg-light rounded shadow-700 z-20"
             >
               {siteSettings.authorizedLinks.map(({ href, label }) => (
                 <li key={`${href}${label}`}>
                   <button
                     onClick={() => handleClick(href)}
-                    className="block w-full py-2.5 px-6 text-sm text-left font-semibold capitalize text-heading transition duration-200 hover:text-primary focus:outline-none"
+                    className="block w-full py-2.5 px-6 text-sm text-start font-semibold capitalize text-heading transition duration-200 hover:text-accent focus:outline-none"
                   >
-                    {label}
+                    {t(label)}
                   </button>
                 </li>
               ))}

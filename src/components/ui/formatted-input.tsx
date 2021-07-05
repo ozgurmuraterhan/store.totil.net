@@ -1,7 +1,6 @@
 import { forwardRef } from "react";
 import cn from "classnames";
 import Cleave from "cleave.js/react";
-
 interface FormattedInputProps {
   name: string;
   label: string;
@@ -16,10 +15,10 @@ interface FormattedInputProps {
 
 const variantClasses = {
   normal:
-    "bg-gray-100 border border-gray-300 focus:shadow focus:bg-white focus:border-primary",
+    "bg-gray-100 border border-border-base focus:shadow focus:bg-light focus:border-accent",
   solid:
-    "bg-gray-100 border border-gray-100 focus:bg-white focus:border-primary",
-  outline: "border border-gray-300 focus:border-primary",
+    "bg-gray-100 border border-border-100 focus:bg-light focus:border-accent",
+  outline: "border border-border-base focus:border-accent",
 };
 
 const FormattedInput = forwardRef<HTMLInputElement, FormattedInputProps>(

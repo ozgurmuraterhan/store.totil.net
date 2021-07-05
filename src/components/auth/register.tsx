@@ -9,9 +9,10 @@ import Input from "@components/ui/input";
 import PasswordInput from "@components/ui/password-input";
 import Button from "@components/ui/button";
 import { useUI } from "@contexts/ui.context";
-import { CUSTOMER, SUPER_ADMIN } from "@utils/constants";
+import { useTranslation } from "next-i18next";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { useModalAction } from "@components/ui/modal/modal.context";
 
 type FormValues = {
   name: string;
@@ -20,9 +21,12 @@ type FormValues = {
 };
 
 const registerFormSchema = yup.object().shape({
-  name: yup.string().required("Name is required"),
-  email: yup.string().email("Email is not valid").required("Email is required"),
-  password: yup.string().required("Password is required"),
+  name: yup.string().required("error-name-required"),
+  email: yup
+    .string()
+    .email("error-email-format")
+    .required("error-email-required"),
+  password: yup.string().required("error-password-required"),
 });
 
 const defaultValues = {
@@ -32,6 +36,7 @@ const defaultValues = {
 };
 
 const RegisterForm = () => {
+  const { t } = useTranslation("common");
   const { mutate, isLoading: loading } = useRegisterMutation();
   const [errorMsg, setErrorMsg] = useState("");
   const {
@@ -45,7 +50,8 @@ const RegisterForm = () => {
     resolver: yupResolver(registerFormSchema),
   });
   const router = useRouter();
-  const { authorize, closeModal, setModalView } = useUI();
+  const { authorize } = useUI();
+  const { closeModal, openModal } = useModalAction();
   function handleNavigate(path: string) {
     router.push(`/${path}`);
     closeModal();
@@ -59,22 +65,15 @@ const RegisterForm = () => {
       },
       {
         onSuccess: (data) => {
-          if (
-            (data?.token && data?.permissions?.includes(CUSTOMER)) ||
-            data?.permissions?.includes(SUPER_ADMIN)
-          ) {
+          if (data?.token && data?.permissions?.length) {
             Cookies.set("auth_token", data.token);
             Cookies.set("auth_permissions", data.permissions);
             authorize();
+            closeModal();
             return;
           }
           if (!data.token) {
-            setErrorMsg("The credentials was wrong!");
-            return;
-          }
-          if (!data.permissions.includes(CUSTOMER)) {
-            setErrorMsg("Doesn't have enough permission");
-            return;
+            setErrorMsg(t("error-credential-wrong"));
           }
         },
         onError: (error) => {
@@ -92,30 +91,30 @@ const RegisterForm = () => {
     );
   }
   return (
-    <div className="py-6 px-5 sm:p-8 bg-white w-screen md:max-w-md h-screen md:h-auto flex flex-col justify-center">
+    <div className="py-6 px-5 sm:p-8 bg-light w-screen md:max-w-md h-screen md:h-auto flex flex-col justify-center">
       <div className="flex justify-center">
         <Logo />
       </div>
       <p className="text-center text-sm md:text-base leading-relaxed px-2 sm:px-0 text-body mt-4 sm:mt-5 mb-7 sm:mb-10">
-        By signing up, you agree to our
+        {t("registration-helper")}
         <span
           onClick={() => handleNavigate("terms")}
-          className="mx-1 underline cursor-pointer text-primary hover:no-underline"
+          className="mx-1 underline cursor-pointer text-accent hover:no-underline"
         >
-          terms
+          {t("text-terms")}
         </span>
         &
         <span
           onClick={() => handleNavigate("privacy")}
-          className="ml-1 underline cursor-pointer text-primary hover:no-underline"
+          className="ms-1 underline cursor-pointer text-accent hover:no-underline"
         >
-          policy
+          {t("text-policy")}
         </span>
       </p>
       {errorMsg && (
         <Alert
           variant="error"
-          message={errorMsg}
+          message={t(errorMsg)}
           className="mb-6"
           closeable={true}
           onClose={() => setErrorMsg("")}
@@ -123,31 +122,31 @@ const RegisterForm = () => {
       )}
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <Input
-          label="Name"
+          label={t("text-name")}
           {...register("name")}
           type="text"
           variant="outline"
           className="mb-5"
-          error={errors.name?.message}
+          error={t(errors.name?.message!)}
         />
         <Input
-          label="Email"
+          label={t("text-email")}
           {...register("email")}
           type="email"
           variant="outline"
           className="mb-5"
-          error={errors.email?.message}
+          error={t(errors.email?.message!)}
         />
         <PasswordInput
-          label="Password"
+          label={t("text-password")}
           {...register("password")}
-          error={errors.password?.message}
+          error={t(errors.password?.message!)}
           variant="outline"
           className="mb-5"
         />
         <div className="mt-8">
           <Button className="w-full h-12" loading={loading} disabled={loading}>
-            Register
+            {t("text-register")}
           </Button>
         </div>
       </form>
@@ -155,17 +154,17 @@ const RegisterForm = () => {
 
       <div className="flex flex-col items-center justify-center relative text-sm text-heading mt-8 sm:mt-11 mb-6 sm:mb-8">
         <hr className="w-full" />
-        <span className="absolute left-2/4 -top-2.5 px-2 -ml-4 bg-white">
-          Or
+        <span className="absolute start-2/4 -top-2.5 px-2 -ms-4 bg-light">
+          {t("text-or")}
         </span>
       </div>
       <div className="text-sm sm:text-base text-body text-center">
-        Already have an account?{" "}
+        {t("text-already-account")}{" "}
         <button
-          onClick={() => setModalView("LOGIN_VIEW")}
-          className="ml-1 underline text-primary font-semibold transition-colors duration-200 focus:outline-none hover:text-primary-2 focus:text-primary-2 hover:no-underline focus:no-underline"
+          onClick={() => openModal("LOGIN_VIEW")}
+          className="ms-1 underline text-accent font-semibold transition-colors duration-200 focus:outline-none hover:text-accent-hover focus:text-accent-hover hover:no-underline focus:no-underline"
         >
-          Login
+          {t("text-login")}
         </button>
       </div>
     </div>

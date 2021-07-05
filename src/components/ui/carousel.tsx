@@ -69,7 +69,7 @@ export const ThumbsCarousel: React.FC<Props> = ({ gallery }) => {
           {gallery?.map((item: any) => (
             <SwiperSlide
               key={`product-thumb-gallery-${item.id}`}
-              className="flex items-center justify-center cursor-pointer rounded overflow-hidden border border-gray-200 border-opacity-75 hover:opacity-75"
+              className="flex items-center justify-center cursor-pointer rounded overflow-hidden border border-border-200 border-opacity-75 hover:opacity-75"
             >
               <Image
                 src={item?.thumbnail ?? "/product-placeholder.svg"}
@@ -80,10 +80,10 @@ export const ThumbsCarousel: React.FC<Props> = ({ gallery }) => {
             </SwiperSlide>
           ))}
         </Swiper>
-        <div className="product-gallery-prev cursor-pointer absolute top-2/4 -left-4 md:-left-5 z-10 -mt-4 md:-mt-5 w-8 h-8 md:w-9 md:h-9 rounded-full bg-white shadow-xl border border-gray-200 border-opacity-70 flex items-center justify-center text-heading transition-all duration-200 hover:bg-gray-100">
+        <div className="product-gallery-prev cursor-pointer absolute top-2/4 -start-4 md:-start-5 z-10 -mt-4 md:-mt-5 w-8 h-8 md:w-9 md:h-9 rounded-full bg-light shadow-xl border border-border-200 border-opacity-70 flex items-center justify-center text-heading transition-all duration-200 hover:bg-gray-100">
           <ChevronLeft className="w-4 h-4" />
         </div>
-        <div className="product-gallery-next cursor-pointer absolute top-2/4 -right-4 md:-right-5 z-10 -mt-4 md:-mt-5 w-8 h-8 md:w-9 md:h-9 rounded-full bg-white shadow-xl border border-gray-200 border-opacity-70 flex items-center justify-center text-heading transition-all duration-200 hover:bg-gray-100">
+        <div className="product-gallery-next cursor-pointer absolute top-2/4 -end-4 md:-end-5 z-10 -mt-4 md:-mt-5 w-8 h-8 md:w-9 md:h-9 rounded-full bg-light shadow-xl border border-border-200 border-opacity-70 flex items-center justify-center text-heading transition-all duration-200 hover:bg-gray-100">
           <ChevronRight className="w-4 h-4" />
         </div>
       </div>

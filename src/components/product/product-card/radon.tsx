@@ -2,6 +2,8 @@ import Link from "next/link";
 import Image from "next/image";
 import cn from "classnames";
 import { siteSettings } from "@settings/site.settings";
+import { useTranslation } from "next-i18next";
+import { ROUTES } from "@utils/routes";
 
 type RadonProps = {
   product: any;
@@ -9,17 +11,19 @@ type RadonProps = {
 };
 
 const Radon: React.FC<RadonProps> = ({ product, className }) => {
+  const { t } = useTranslation("common");
   const { name, slug, image, author } = product ?? {};
 
   return (
-    <Link href={`/products/${slug}`}>
+    <Link href={`${ROUTES.PRODUCT}/${slug}`}>
       <article
         className={cn(
-          "product-card cart-type-radon rounded h-full bg-white overflow-hidden cursor-pointer transition-shadow duration-200 hover:shadow-sm",
+          "product-card cart-type-radon rounded h-full bg-light overflow-hidden cursor-pointer transition-shadow duration-200 hover:shadow-sm",
           className
         )}
       >
         <div className="relative flex items-center justify-center w-auto h-48 sm:h-64">
+          <span className="sr-only">{t("text-product-image")}</span>
           <Image
             src={image?.original ?? siteSettings?.product?.placeholderImage}
             alt={name}
@@ -34,7 +38,9 @@ const Radon: React.FC<RadonProps> = ({ product, className }) => {
           <h3 className="text-sm md:text-base text-heading font-semibold truncate mb-2">
             {name}
           </h3>
-          <p className="text-xs md:text-sm text-body">by {author}</p>
+          <p className="text-xs md:text-sm text-body">
+            {t("text-by")} {author}
+          </p>
         </header>
         {/* End of product info */}
       </article>

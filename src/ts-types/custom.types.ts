@@ -1,3 +1,4 @@
+import { Children } from "react";
 import { QueryKey } from "react-query";
 
 export type CategoriesQueryOptionsType = {
@@ -8,11 +9,29 @@ export type CategoriesQueryOptionsType = {
   limit?: number;
 };
 export type ProductsQueryOptionsType = {
-  type: string;
+  type?: string;
   text?: string;
   category?: string;
   status?: string;
   limit?: number;
+  shop_id?: number;
+};
+
+export type ShopsQueryOptionsType = {
+  text?: string;
+  category?: string;
+  status?: string;
+  limit?: number;
+  is_active?: number;
+};
+export type OrdersQueryOptionsType = {
+  tracking_number?: string;
+  orderBy?: string;
+  sortedBy?: string;
+  customer_id?: number;
+  shop_id?: number;
+  first?: number;
+  page?: number;
 };
 
 export type QueryParamsType = {
@@ -61,15 +80,24 @@ export declare type Attachment = {
   thumbnail?: string;
   original?: string;
 };
+export declare type AttributeValue = {
+  id: string;
+};
+export declare type Variation = {
+  id: string;
+  options?: any;
+};
 export declare type Product = {
   id?: number | string;
   name?: string;
   slug?: string;
   type?: Type;
   categories?: Category[];
-  // variations: AttributeValue[]
+  variations: AttributeValue[];
+  variation_options: Variation[];
   // pivot?: OrderProductPivot
   // orders: Order[]
+  shop?: any;
   description?: string;
   in_stock?: boolean;
   is_taxable?: boolean;
@@ -82,6 +110,9 @@ export declare type Product = {
   length?: string;
   width?: string;
   price?: number;
+  min_price?: number;
+  max_price?: number;
+  related_products?: Product[];
   quantity?: number;
   unit?: string;
   created_at?: Date;
@@ -102,6 +133,7 @@ export declare type Order = {
   // customer?: Maybe<User>;
   // status: OrderStatus;
   amount: number;
+  children: Order[];
   sales_tax: number;
   total: number;
   paid_total: number;
@@ -130,4 +162,8 @@ export type SettingsOptions = {
   logo?: Attachment;
   taxClass?: string;
   shippingClass?: string;
+};
+
+export type Shop = {
+  [key: string]: any;
 };

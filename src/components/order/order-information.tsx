@@ -4,6 +4,8 @@ import { useCheckout } from "@contexts/checkout.context";
 import usePrice from "@utils/use-price";
 import EmptyCartIcon from "@components/icons/empty-cart";
 import { CloseIcon } from "@components/icons/close-icon";
+import { useTranslation } from "next-i18next";
+
 import { useCart } from "@contexts/quick-cart/cart.context";
 import {
   calculatePaidTotal,
@@ -14,6 +16,7 @@ interface Props {
 }
 
 const OrderInformation = (props: Props) => {
+  const { t } = useTranslation("common");
   const { items, isEmpty } = useCart();
 
   const { checkoutData, discount, removeCoupon, coupon } = useCheckout();
@@ -55,7 +58,7 @@ const OrderInformation = (props: Props) => {
   );
   return (
     <div className={props.className}>
-      <div className="flex flex-col border-b pb-2 border-gray-200">
+      <div className="flex flex-col border-b pb-2 border-border-200">
         {!isEmpty ? (
           items?.map((item: any) => {
             const notAvailable = checkoutData?.unavailable_products?.find(
@@ -76,24 +79,24 @@ const OrderInformation = (props: Props) => {
 
       <div className="mt-4">
         <div className="flex justify-between mb-3">
-          <p className="text-sm text-body">Sub Total</p>
+          <p className="text-sm text-body">{t("text-sub-total")}</p>
           <span className="text-sm text-body">{sub_total}</span>
         </div>
         <div className="flex justify-between mb-3">
-          <p className="text-sm text-body">Taxes</p>
+          <p className="text-sm text-body">{t("text-tax")}</p>
           <span className="text-sm text-body">{tax}</span>
         </div>
         <div className="flex justify-between mb-3">
-          <p className="text-sm text-body">Shipping</p>
+          <p className="text-sm text-body">{t("text-shipping")}</p>
           <span className="text-sm text-body">{shipping}</span>
         </div>
         {discount ? (
           <div className="flex justify-between mb-4">
-            <p className="text-sm text-body mr-4">Discount</p>
-            <span className="text-xs font-semibold text-red-500 flex items-center mr-auto">
+            <p className="text-sm text-body me-4">{t("text-discount")}</p>
+            <span className="text-xs font-semibold text-red-500 flex items-center me-auto">
               ({coupon.code})
               <button onClick={removeCoupon}>
-                <CloseIcon className="w-3 h-3 ml-2" />
+                <CloseIcon className="w-3 h-3 ms-2" />
               </button>
             </span>
             <span className="text-sm text-body">{discountPrice}</span>
@@ -103,8 +106,10 @@ const OrderInformation = (props: Props) => {
             <Coupon />
           </div>
         )}
-        <div className="flex justify-between border-t-4 border-double border-gray-200 pt-4">
-          <p className="text-base font-semibold text-heading">Total</p>
+        <div className="flex justify-between border-t-4 border-double border-border-200 pt-4">
+          <p className="text-base font-semibold text-heading">
+            {t("text-total")}
+          </p>
           <span className="text-base font-semibold text-heading">{total}</span>
         </div>
       </div>

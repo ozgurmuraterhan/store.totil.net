@@ -4,6 +4,8 @@ import Image from "next/image";
 import cn from "classnames";
 import { siteSettings } from "@settings/site.settings";
 import usePrice from "@utils/use-price";
+import { useTranslation } from "next-i18next";
+import { ROUTES } from "@utils/routes";
 
 type KryptonProps = {
   product: any;
@@ -11,6 +13,7 @@ type KryptonProps = {
 };
 
 const Krypton: FC<KryptonProps> = ({ product, className }) => {
+  const { t } = useTranslation("common");
   const { name, slug, image } = product ?? {};
   const { price, basePrice, discount } = usePrice({
     amount: product.price,
@@ -18,14 +21,15 @@ const Krypton: FC<KryptonProps> = ({ product, className }) => {
   });
 
   return (
-    <Link href={`/products/${slug}`}>
+    <Link href={`${ROUTES.PRODUCT}/${slug}`}>
       <article
         className={cn(
-          "product-card cart-type-krypton h-full rounded bg-white overflow-hidden cursor-pointer transition-shadow duration-200 hover:shadow-sm",
+          "product-card cart-type-krypton h-full rounded bg-light overflow-hidden cursor-pointer transition-shadow duration-200 hover:shadow-sm",
           className
         )}
       >
         <div className="relative flex items-center justify-center w-auto h-48 sm:h-64">
+          <span className="sr-only">{t("text-product-image")}</span>
           <Image
             src={image?.original ?? siteSettings?.product?.placeholderImage}
             alt={name}
@@ -34,7 +38,7 @@ const Krypton: FC<KryptonProps> = ({ product, className }) => {
             className="product-image"
           />
           {discount && (
-            <div className="absolute top-3 right-3 md:top-4 md:right-4 rounded-full text-xs leading-6 font-semibold px-2 md:px-2.5 bg-yellow-500 text-white">
+            <div className="absolute top-3 end-3 md:top-4 md:end-4 rounded-full text-xs leading-6 font-semibold px-2 md:px-2.5 bg-yellow-500 text-light">
               {discount}
             </div>
           )}
@@ -48,12 +52,10 @@ const Krypton: FC<KryptonProps> = ({ product, className }) => {
           {/* End of product title */}
 
           <div className="flex items-center justify-center">
-            <span className="text-sm text-gray-700">
+            <span className="text-sm text-sub-heading">
               {basePrice ? basePrice : price}
             </span>
-            {discount && (
-              <del className="text-sm text-gray-400 ml-2">{price}</del>
-            )}
+            {discount && <del className="text-sm text-muted ms-2">{price}</del>}
           </div>
         </header>
       </article>

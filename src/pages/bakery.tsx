@@ -16,6 +16,8 @@ import { getKeyValue } from "@utils/get-key-value";
 import { fetchProducts } from "@data/product/use-products.query";
 import { fetchCategories } from "@data/category/use-categories.query";
 import { fetchTypes } from "@data/type/use-types.query";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+
 const CartCounterButton = dynamic(
   () => import("@components/cart/cart-counter-button"),
   { ssr: false }
@@ -55,7 +57,7 @@ export default function BakeryPage() {
 BakeryPage.Layout = HomeLayout;
 // This function gets called at build time
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getStaticProps: GetStaticProps = async ({ locale }) => {
   const queryClient = new QueryClient();
 
   await queryClient.prefetchInfiniteQuery(
@@ -79,6 +81,7 @@ export const getStaticProps: GetStaticProps = async () => {
   return {
     props: {
       dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))),
+      ...(await serverSideTranslations(locale!, ["common", "banner"])),
     },
     revalidate: 60,
   };
