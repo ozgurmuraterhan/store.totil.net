@@ -4,7 +4,8 @@ import { siteSettings } from "@settings/site.settings";
 import usePrice from "@utils/use-price";
 import { AddToCart } from "@components/product/add-to-cart/add-to-cart";
 import { useTranslation } from "next-i18next";
-import { useModalAction } from "@components/ui/modal/modal.context";
+//import { useModalAction } from "@components/ui/modal/modal.context";
+import { useRouter } from "next/router";
 
 type NeonProps = {
   product: any;
@@ -12,17 +13,25 @@ type NeonProps = {
 };
 
 const Neon: React.FC<NeonProps> = ({ product, className }) => {
+  const router = useRouter();
   const { t } = useTranslation("common");
   const { name, image, quantity } = product ?? {};
   const { price, basePrice, discount } = usePrice({
     amount: product.price,
     baseAmount: product.sale_price,
   });
-  const { openModal } = useModalAction();
+  //const { openModal } = useModalAction();
 
-  function handleProductQuickView() {
-    return openModal("PRODUCT_DETAILS", product.slug);
+  // function handleProductQuickView() {
+  //   return openModal("PRODUCT_DETAILS", product.slug);
+  // }
+
+  function navigateToProductDetails(){
+
+    router.push(`/products/${product.slug}`);
+
   }
+
   return (
     <article
       className={cn(
@@ -32,7 +41,7 @@ const Neon: React.FC<NeonProps> = ({ product, className }) => {
     >
       <div
         className="relative flex items-center justify-center cursor-pointer w-auto h-48 sm:h-64"
-        onClick={handleProductQuickView}
+        onClick={navigateToProductDetails}
       >
         <span className="sr-only">{t("text-product-image")}</span>
         <Image
@@ -63,7 +72,7 @@ const Neon: React.FC<NeonProps> = ({ product, className }) => {
 
         <h3
           className="text-xs md:text-sm text-body truncate mb-4 cursor-pointer"
-          onClick={handleProductQuickView}
+          onClick={navigateToProductDetails}
         >
           {name}
         </h3>

@@ -5,7 +5,8 @@ import usePrice from "@utils/use-price";
 import { AddToCart } from "@components/product/add-to-cart/add-to-cart";
 import { useTranslation } from "next-i18next";
 import { PlusIcon } from "@components/icons/plus-icon";
-import { useModalAction } from "@components/ui/modal/modal.context";
+//import { useModalAction } from "@components/ui/modal/modal.context";
+import { useRouter } from "next/router";
 
 type XenonProps = {
   product: any;
@@ -13,6 +14,7 @@ type XenonProps = {
 };
 
 const Xenon: React.FC<XenonProps> = ({ product, className }) => {
+  const router = useRouter();
   const { t } = useTranslation("common");
   const { name, image, quantity, min_price, max_price, product_type } =
     product ?? {};
@@ -26,10 +28,16 @@ const Xenon: React.FC<XenonProps> = ({ product, className }) => {
   const { price: maxPrice } = usePrice({
     amount: max_price,
   });
-  const { openModal } = useModalAction();
+  // const { openModal } = useModalAction();
 
-  function handleProductQuickView() {
-    return openModal("PRODUCT_DETAILS", product.slug);
+  // function handleProductQuickView() {
+  //   return openModal("PRODUCT_DETAILS", product.slug);
+  // }
+
+  function navigateToProductDetails(){
+
+    router.push(`/products/${product.slug}`);
+
   }
 
   return (
@@ -41,7 +49,7 @@ const Xenon: React.FC<XenonProps> = ({ product, className }) => {
     >
       <div
         className="relative flex items-center justify-center cursor-pointer w-auto h-48 sm:h-64"
-        onClick={handleProductQuickView}
+        onClick={navigateToProductDetails}
       >
         <span className="sr-only">{t("text-product-image")}</span>
         <Image
@@ -62,7 +70,7 @@ const Xenon: React.FC<XenonProps> = ({ product, className }) => {
       <header className="p-3 md:p-6">
         <h3
           className="text-xs md:text-sm text-body truncate cursor-pointer"
-          onClick={handleProductQuickView}
+          onClick={navigateToProductDetails}
         >
           {name}
         </h3>
@@ -83,7 +91,7 @@ const Xenon: React.FC<XenonProps> = ({ product, className }) => {
               </div>
 
               <button
-                onClick={handleProductQuickView}
+                onClick={navigateToProductDetails}
                 className="w-7 h-7 md:w-9 md:h-9 flex items-center justify-center text-sm text-accent bg-light rounded border border-border-200 transition-colors hover:bg-accent hover:border-accent hover:text-light focus:outline-none focus:bg-accent focus:border-accent focus:text-light"
               >
                 <span className="sr-only">plus</span>

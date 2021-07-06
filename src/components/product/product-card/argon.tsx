@@ -4,7 +4,8 @@ import { siteSettings } from "@settings/site.settings";
 import { AddToCart } from "@components/product/add-to-cart/add-to-cart";
 import usePrice from "@utils/use-price";
 import { useTranslation } from "next-i18next";
-import { useModalAction } from "@components/ui/modal/modal.context";
+//import { useModalAction } from "@components/ui/modal/modal.context";
+import { useRouter } from "next/router";
 
 type ArgonProps = {
   product: any;
@@ -12,15 +13,22 @@ type ArgonProps = {
 };
 
 const Argon: React.FC<ArgonProps> = ({ product, className }) => {
+  const router = useRouter();
   const { t } = useTranslation("common");
   const { name, image, quantity } = product ?? {};
-  const { openModal } = useModalAction();
+  //const { openModal } = useModalAction();
   const { price, basePrice, discount } = usePrice({
     amount: product.price,
     baseAmount: product.sale_price,
   });
-  function handleProductQuickView() {
-    return openModal("PRODUCT_DETAILS", product.slug);
+  // function handleProductQuickView() {
+  //   return openModal("PRODUCT_DETAILS", product.slug);
+  // }
+
+  function navigateToProductDetails(){
+
+    router.push(`/products/${product.slug}`);
+
   }
 
   return (
@@ -29,7 +37,7 @@ const Argon: React.FC<ArgonProps> = ({ product, className }) => {
         "product-card cart-type-argon rounded bg-light overflow-hidden shadow-sm transition-all duration-200 hover:shadow transform hover:-translate-y-0.5 h-full",
         className
       )}
-      onClick={handleProductQuickView}
+      onClick={navigateToProductDetails}
       role="button"
     >
       <div className="relative flex items-center justify-center w-auto h-48 sm:h-52">

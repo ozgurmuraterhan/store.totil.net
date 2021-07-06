@@ -6,7 +6,7 @@ import { siteSettings } from "@settings/site.settings";
 import Logo from "@components/ui/logo";
 import Search from "@components/common/search";
 import JoinButton from "@components/layout/navbar/join-button";
-import ProductTypeMenu from "@components/layout/navbar/product-type-menu";
+//import ProductTypeMenu from "@components/layout/navbar/product-type-menu";
 import dynamic from "next/dynamic";
 import { ROUTES } from "@utils/routes";
 import { useTypesQuery } from "@data/type/use-types.query";
@@ -61,7 +61,7 @@ const NavbarWithSearch = () => {
         ) : (
           <>
             <Logo className="mx-auto lg:mx-0" />
-            <ProductTypeMenu className="ms-10 me-auto hidden xl:block" />
+            {/* <ProductTypeMenu className="ms-10 me-auto hidden xl:block" /> */}
             <div className="hidden lg:block w-full">
               <div
                 className={cn(

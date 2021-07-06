@@ -4,7 +4,8 @@ import usePrice from "@utils/use-price";
 import { siteSettings } from "@settings/site.settings";
 import { AddToCart } from "@components/product/add-to-cart/add-to-cart";
 import { useTranslation } from "next-i18next";
-import { useModalAction } from "@components/ui/modal/modal.context";
+//import { useModalAction } from "@components/ui/modal/modal.context";
+import { useRouter } from "next/router";
 
 type HeliumProps = {
   product: any;
@@ -12,16 +13,23 @@ type HeliumProps = {
 };
 
 const Helium: React.FC<HeliumProps> = ({ product, className }) => {
+  const router = useRouter();
   const { t } = useTranslation("common");
   const { name, image, unit, quantity } = product ?? {};
-  const { openModal } = useModalAction();
+  //const { openModal } = useModalAction();
   const { price, basePrice, discount } = usePrice({
     amount: product.price,
     baseAmount: product.sale_price,
   });
 
-  function handleProductQuickView() {
-    return openModal("PRODUCT_DETAILS", product.slug);
+  // function handleProductQuickView() {
+  //   return openModal("PRODUCT_DETAILS", product.slug);
+  // }
+
+  function navigateToProductDetails(){
+
+    router.push(`/products/${product.slug}`);
+
   }
 
   return (
@@ -32,7 +40,7 @@ const Helium: React.FC<HeliumProps> = ({ product, className }) => {
       )}
     >
       <div
-        onClick={handleProductQuickView}
+        onClick={navigateToProductDetails}
         className="relative flex items-center justify-center w-auto h-48 sm:h-64"
         role="button"
       >
@@ -54,7 +62,7 @@ const Helium: React.FC<HeliumProps> = ({ product, className }) => {
 
       <header className="p-3 md:p-6 relative">
         <h3
-          onClick={handleProductQuickView}
+          onClick={navigateToProductDetails}
           role="button"
           className="text-heading text-sm font-semibold truncate mb-2"
         >
