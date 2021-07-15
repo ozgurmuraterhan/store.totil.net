@@ -1,5 +1,5 @@
 import { useUI } from "@contexts/ui.context";
-import ProductTypeMenu from "@components/layout/navbar/product-type-menu";
+//import ProductTypeMenu from "@components/layout/navbar/product-type-menu";
 import { FilterIcon } from "@components/icons/filter-icon";
 import { useTranslation } from "next-i18next";
 
@@ -19,7 +19,7 @@ export default function FilterBar() {
         <FilterIcon width="18" height="14" className="me-2" />
         {t("text-filter")}
       </button>
-      <ProductTypeMenu btnClassName="text-heading transition-colors duration-200 hover:text-accent focus:text-accent" />
+      {/* <ProductTypeMenu btnClassName="text-heading transition-colors duration-200 hover:text-accent focus:text-accent" /> */}
     </div>
   );
 }

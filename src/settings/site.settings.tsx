@@ -56,10 +56,13 @@ export const siteSettings = {
     ],
   },
   headerLinks: [
-    { href: ROUTES.SHOPS, icon: null, label: "nav-menu-shops" },
-    { href: ROUTES.OFFERS, icon: null, label: "nav-menu-offer" },
-    { href: ROUTES.HELP, label: "nav-menu-faq" },
-    { href: ROUTES.CONTACT, label: "nav-menu-contact" },
+    // { href: ROUTES.SHOPS, icon: null, label: "nav-menu-shops" },
+    // { href: ROUTES.OFFERS, icon: null, label: "nav-menu-offer" },
+    // { href: ROUTES.HELP, label: "nav-menu-faq" },
+     //{ href: ROUTES.PRIVACY, label: "nav-menu-privacy" },
+    // { href: ROUTES.CONTACT, label: "nav-menu-contact" },
+    { href: 'https://store.totil.net/en/books', label: "English" },
+    { href: 'https://store.totil.net/en/ar/books', label: "عربي" },
   ],
   authorizedLinks: [
     { href: ROUTES.PROFILE, label: "auth-menu-profile" },

@@ -46,6 +46,7 @@ const Navbar = () => {
                 </a>
               </NavLink>
             </li>
+
           ))}
           {isAuthorize ? (
             <li>
@@ -56,6 +57,7 @@ const Navbar = () => {
               <JoinButton />
             </li>
           )}
+          
         </ul>
       </nav>
     </header>
